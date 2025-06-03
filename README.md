@@ -1,4 +1,4 @@
-# MLRegression - Tools for Machine Learning Regression
+# Tools for Machine Learning Regression in Python
 
 The MLRegression module includes the following main Python functions to facilitate the use of sklearn and statsmodels solvers: 
  
