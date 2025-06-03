@@ -1,4 +1,4 @@
-# MLRegression - Tools for Machine Learning Regression
+# MLRegression - Tools for Machine Learning Regression in Python
 
 The MLRegression module includes the following main functions to facilitate the use of sklearn and statsmodels solvers: 
  
@@ -8,7 +8,7 @@ The MLRegression module includes the following main functions to facilitate the 
  - **stacking** - StackingRegressor
  - **gbr** - GradientBoostingRegressor
  - **gbr** - GradientBoostingRegressor
- - **stepwise** - Stepwise multiple regression to minimize MSE, AIC, or BIC
+ - **stepwise** - Stepwise multiple linear regression to minimize MSE, AIC, or BIC
  
 The functions in the MLRegression module fit multiple linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
 
