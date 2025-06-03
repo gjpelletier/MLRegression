@@ -16,7 +16,7 @@ The functions in the MLRegression module allow the user to write one line of pyt
 
 - regression summary statistics of the best fit model (e.g. r-squared, adjusted r-squared, RMSE of residuals, p-value of the F-statistic, AIC, BIC, alpha, etc.)
 - best fit intercept and model coefficients (if applicable)
-- variance  inflation factors
+- variance  inflation factors (if applicable)
 - residual plots
 - figures showing other diagnostic descriptions of the analysis (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha) 
 
