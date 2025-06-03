@@ -14,16 +14,6 @@ In one line of python code the user can display and save the output of the follo
 - residual plots
 - figures showing other diagnostic descriptions of the analysis (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha) 
 
-### Stepwise
-
-The **stepwise** function in the MLRegression module has the option to use either forward selection (default), backward selection, or all subsets of possible combinations for the optimum set of predictor variables as follows using statsmodels OLS:
-
-- Forward selection (default) starts with no predictors and adds predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared) 
-- Backward selection starts with all predictors and removes predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared)
-- All subsets of possible combinations of predictor features to find the best of all possible models (up to 20 candidate predictors)
-
-Either the AIC, BIC, or adjusted rsquared may be used as the criterion with forward, backward, or all subsets. In addition, there is an option to find all features with p-values less than a signficance threshold through backward elimination based only on the p-values of the coefficients. The stepwise algorithm also has the option (default) to remove any non-signficant predictors after either a forward, backward, or all subsets search using the AIC, BIC, or adjusted rsquared criterion. 
-
 ### Lasso
 
 The **lasso** function in the MLRegression module provides output of regression models and summary statistics using the following methods using sklearn.linear_model:
@@ -102,6 +92,16 @@ Final Prediction:
 – Helps mitigate overfitting or underfitting 
 – Works well for datasets with nonlinear relationships
 
+### Stepwise
+
+The **stepwise** function in the MLRegression module has the option to use either forward selection (default), backward selection, or all subsets of possible combinations for the optimum set of predictor variables as follows using statsmodels OLS:
+
+- Forward selection (default) starts with no predictors and adds predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared) 
+- Backward selection starts with all predictors and removes predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared)
+- All subsets of possible combinations of predictor features to find the best of all possible models (up to 20 candidate predictors)
+
+Either the AIC, BIC, or adjusted rsquared may be used as the criterion with forward, backward, or all subsets. In addition, there is an option to find all features with p-values less than a signficance threshold through backward elimination based only on the p-values of the coefficients. The stepwise algorithm also has the option (default) to remove any non-signficant predictors after either a forward, backward, or all subsets search using the AIC, BIC, or adjusted rsquared criterion. 
+
 ### Comparison of Stepwise, Lasso, Ridge, and Elastic Net
 
 - Feature selection: Lasso performs explicit feature selection by setting some coefficients to zero, while Ridge shrinks coefficients but retains all predictors. Elastic Net balances the regularization methods of Lasso and Ridge and is able to do feature selection. Stepwise regression also performs feature selection but can be less stable than Lasso. 
@@ -132,7 +132,6 @@ Ridge regression reduces the Variance Inflation Factors of the features by addin
 Cross-validated ridge regression (e.g. using RidgeCV) does not always result in acceptable multicollinearity as indicated by VIF. While cross-validation helps in fine-tuning the regression coefficients, it does not always result in VIF values close to 1. Ideally the VIF of all features should be as close as possibe to VIF=1. This can be achieved using a trial and error method of evaluating the VIF values of the model features over a range of alpha values. 
 
 The **ridge** function in MLRegression includes an algorithm (RidgeVIF) to find the model with the optimum value of alpha that will result in VIF values as close as possible to a user-specified target VIF (default target VIF=1.0). This assures that there will be acceptable multicollinearity for all features. The trade-off is that this algorithm reduces the model coefficients such that the target VIF will be achieved. The user has the option to specify any target for VIF to explore the balance between VIF and coefficient values.  
-
 
 ## Installation for Python or Jupyter Notebook
 
