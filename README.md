@@ -94,7 +94,7 @@ Final Prediction:
 
 ### Stepwise
 
-The **stepwise** function in the MLRegression module is intended to be a Python alternative to the R stepAIC function. has the option to use either forward selection (default), backward selection, or all subsets of possible combinations for the optimum set of predictor variables as follows using statsmodels OLS:
+The **stepwise** function in the MLRegression module is intended to be a Python alternative to the R stepAIC function. The **stepwise** function has the option to use either forward selection (default), backward selection, or all subsets of possible combinations for the optimum set of predictor variables as follows using statsmodels OLS:
 
 - Forward selection (default) starts with no predictors and adds predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared) 
 - Backward selection starts with all predictors and removes predictors as long as it improves the model (reduces AIC or BIC, or increases adjusted rsquared)
