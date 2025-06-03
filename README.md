@@ -2,8 +2,6 @@
 
 The MLRegression module includes five main functions, **lasso**, **ridge**, **elastic**, **stacking**, **stepwise** to find the set of predictor variables that minimizes either the Mean Squared Error (MSE), Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC), adjusted rsquared, or Variance Inflation Factors (VIF) in a multiple linear regression model.
 
-The choice between Lasso, Ridge, Elastic Net, Stacking, or Stepwise regression depends on the specific context and requirements of the analysis. Stepwise regression is widely used ([e.g. Murtaugh, 2009](https://doi.org/10.1111/j.1461-0248.2009.01361.x)), but often criticized ([e.g. Flom and Cassell, 2007](https://www.lexjansen.com/pnwsug/2008/DavidCassell-StoppingStepwise.pdf)). Machine Learning methods such as Lasso, Ridge, and Elastic Net regression are generally preferred for their efficiency and ability to handle large datasets without overfitting. However, Stepwise regression can be more suitable for exploratory data analysis and when the goal is to identify the most influential predictors. Ultimately, the best choice depends on the data characteristics and the researcher's objectives. Stacking regression is an ensemble machine learning technique that improves predictive accuracy by combining multiple base regression models.
-
 The functions in the MLRegression module fit the linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
 
 In one line of python code the user can display and save the output of the following:
@@ -101,6 +99,8 @@ The **stepwise** function in the MLRegression module is intended to be a Python 
 - All subsets of possible combinations of predictor features to find the best of all possible models (up to 20 candidate predictors)
 
 Either the AIC, BIC, or adjusted rsquared may be used as the criterion with forward, backward, or all subsets. In addition, there is an option to find all features with p-values less than a signficance threshold through backward elimination based only on the p-values of the coefficients. The stepwise algorithm also has the option (default) to remove any non-signficant predictors after either a forward, backward, or all subsets search using the AIC, BIC, or adjusted rsquared criterion. 
+
+The choice between Lasso, Ridge, Elastic Net, Stacking, or Stepwise regression depends on the specific context and requirements of the analysis. Stepwise regression is widely used ([e.g. Murtaugh, 2009](https://doi.org/10.1111/j.1461-0248.2009.01361.x)), but often criticized ([e.g. Flom and Cassell, 2007](https://www.lexjansen.com/pnwsug/2008/DavidCassell-StoppingStepwise.pdf)). Machine Learning methods such as Lasso, Ridge, and Elastic Net regression are generally preferred for their efficiency and ability to handle large datasets without overfitting. However, Stepwise regression can be more suitable for exploratory data analysis and when the goal is to identify the most influential predictors. Ultimately, the best choice depends on the data characteristics and the researcher's objectives. Stacking regression is an ensemble machine learning technique that improves predictive accuracy by combining multiple base regression models.
 
 ### Comparison of Stepwise, Lasso, Ridge, and Elastic Net
 
