@@ -18,7 +18,7 @@ The functions in the MLRegression module allow the user to write one line of pyt
 - best fit intercept and model coefficients (if applicable)
 - variance  inflation factors (if applicable)
 - plots of predicted vs actual and predicted vs residuals
-- figures showing other diagnostic descriptions of the analysis (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha)
+- figures showing other diagnostic descriptions of the analysis if applicable (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha)
 - final fitted model object
 - scaler used to standardize X (if applicable)
 
