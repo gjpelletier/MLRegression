@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.01"
+__version__ = "1.1.02"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -206,7 +206,7 @@ def stepwise(X, y, **kwargs):
 
     """
 
-    from stepAIC import detect_dummy_variables
+    from MLRegression import detect_dummy_variables
     import statsmodels.api as sm
     from itertools import combinations
     import pandas as pd
@@ -1140,7 +1140,7 @@ def lasso(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_model, detect_dummy_variables
+    from MLRegression import stats_given_model, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -1822,7 +1822,7 @@ def vif_ridge(X, pen_factors, is_corr=False):
     Example use of vif_ridge using sklearn for the analysis:
     
     from sklearn.datasets import load_diabetes
-    from stepAIC import vif_ridge
+    from MLRegression import vif_ridge
     import numpy as np
     import pandas as pd
     X, y = load_diabetes(return_X_y=True, as_frame=True)
@@ -1947,7 +1947,7 @@ def ridge(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_model, vif_ridge, detect_dummy_variables
+    from MLRegression import stats_given_model, vif_ridge, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -2694,7 +2694,7 @@ def elastic(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_model, detect_dummy_variables
+    from MLRegression import stats_given_model, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -3103,7 +3103,7 @@ def stacking(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -3465,7 +3465,7 @@ def svr(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -3733,7 +3733,7 @@ def sgd(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -3991,7 +3991,7 @@ def gbr(X, y, **kwargs):
 
     """
 
-    from stepAIC import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
