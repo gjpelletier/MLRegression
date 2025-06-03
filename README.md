@@ -15,7 +15,7 @@ The functions in the MLRegression module fit multiple linear regression models u
 The functions in the MLRegression module allow the user to write one line of python code to display and save the output of the following:
 
 - regression summary statistics of the best fit model (e.g. r-squared, adjusted r-squared, RMSE of residuals, p-value of the F-statistic, AIC, BIC, alpha, etc.)
-- best fit intercept and model coefficients
+- best fit intercept and model coefficients (if applicable)
 - variance  inflation factors
 - residual plots
 - figures showing other diagnostic descriptions of the analysis (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha) 
