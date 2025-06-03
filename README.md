@@ -1,6 +1,6 @@
-# MLRegression - Tools for Machine Learning Regression in Python
+# MLRegression - Tools for Machine Learning Regression
 
-The MLRegression module includes the following main functions to facilitate the use of sklearn and statsmodels solvers: 
+The MLRegression module includes the following main Python functions to facilitate the use of sklearn and statsmodels solvers: 
  
  - **lasso** - LassoCV, LassoLarsCV, and LassoLarsIC using AIC/BIC
  - **ridge** - RidgeCV, Ridge usign AIC/BIC, Ridge using VIF
