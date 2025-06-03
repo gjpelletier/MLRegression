@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.04"
+__version__ = "1.1.05"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4684,7 +4684,7 @@ def lgbm(X, y, **kwargs):
         reg_lambda=0.0,        # L2 regularization term on weights
         random_state=None,     # Random seed for reproducibility
         n_jobs=-1,             # Number of parallel threads (-1 uses all available cores)
-        silent='warn',         # Deprecated, use verbosity instead
+        verbosity=-1,          # -1 to turn off lightgbm warnings
         importance_type='split' # Type of feature importance ('split' or 'gain')
 
     Standardization is generally recommended
