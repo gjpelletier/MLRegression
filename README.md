@@ -3,12 +3,12 @@
 The MLRegression module includes the following main functions to facilitate the use of sklearn and statsmodels solvers: 
  
  - **lasso** - LassoCV, LassoLarsCV, and LassoLarsIC using AIC/BIC
- - **ridge**: RidgeCV, Ridge usign AIC/BIC, Ridge using VIF
- - **elastic**: ElasticNetCV
- - **stacking**: StackingRegressor
- - **gbr**: GradientBoostingRegressor
- - **gbr**: GradientBoostingRegressor
- - **stepwise**: Stepwise multiple regression
+ - **ridge** - RidgeCV, Ridge usign AIC/BIC, Ridge using VIF
+ - **elastic** - ElasticNetCV
+ - **stacking** - StackingRegressor
+ - **gbr** - GradientBoostingRegressor
+ - **gbr** - GradientBoostingRegressor
+ - **stepwise** - Stepwise multiple regression
  
 The functions in the MLRegression module fit multiple linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
 
