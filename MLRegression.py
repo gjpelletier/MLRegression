@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.02"
+__version__ = "1.1.03"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -1420,7 +1420,36 @@ def lasso(X, y, **kwargs):
 
     # residual plot for training error
     if data['verbose'] == 'on':
-        '''
+        # plot predictions vs actual
+        y_pred_cv = stats_cv['y_pred']
+        y_pred_lars_cv = stats_lars_cv['y_pred']
+        y_pred_aic = stats_aic['y_pred']
+        y_pred_bic = stats_bic['y_pred']
+        res_cv = stats_cv['residuals']
+        res_lars_cv = stats_lars_cv['residuals']
+        res_aic = stats_aic['residuals']
+        res_bic = stats_bic['residuals']
+        rmse_cv = stats_cv['RMSE']
+        rmse_lars_cv = stats_lars_cv['RMSE']
+        rmse_aic = stats_aic['RMSE']
+        rmse_bic = stats_bic['RMSE']
+        plt.figure()
+        plt.scatter(y_pred_cv, y, s=40, label=('LassoCV (RMSE={:.2f})'.format(rmse_cv)))
+        plt.scatter(y_pred_lars_cv, y, s=15, label=('LassoLarsCV (RMSE={:.2f})'.format(rmse_lars_cv)))
+        plt.scatter(y_pred_aic, y, s=10, label=('LassoLarsAIC (RMSE={:.2f})'.format(rmse_aic)))
+        plt.scatter(y_pred_bic, y, s=5, label=('LassoLarsBIC (RMSE={:.2f})'.format(rmse_bic)))
+
+        # plt.hlines(y=0, xmin=min(y), xmax=max(y), color='k')
+        y45 = np.linspace(min(y), max(y), 100)  # Adjust range as needed
+        x45 = y45  # 45-degree line: y = x
+        plt.plot(x45, y45, color="k")
+
+        plt.title("Actual vs. Predicted")
+        plt.legend();
+        plt.xlabel('y_pred')
+        plt.ylabel('y')
+        plt.savefig("Lasso_predictions_vs_actual.png", dpi=300)
+        # plot predictions vs residuals
         y_pred_cv = stats_cv['y_pred']
         y_pred_lars_cv = stats_lars_cv['y_pred']
         y_pred_aic = stats_aic['y_pred']
@@ -1438,13 +1467,12 @@ def lasso(X, y, **kwargs):
         plt.scatter(y_pred_lars_cv, (res_lars_cv), s=15, label=('LassoLarsCV (RMSE={:.2f})'.format(rmse_lars_cv)))
         plt.scatter(y_pred_aic, (res_aic), s=10, label=('LassoLarsAIC (RMSE={:.2f})'.format(rmse_aic)))
         plt.scatter(y_pred_bic, (res_bic), s=5, label=('LassoLarsBIC (RMSE={:.2f})'.format(rmse_bic)))
-        rmse_cv = np.sqrt(np.mean((res_cv)**2))
         plt.hlines(y=0, xmin=min(y), xmax=max(y), color='k')
-        plt.title("Residual plot for training error")
+        plt.title("Residuals vs. Predicted")
         plt.legend();
         plt.xlabel('y_pred')
         plt.ylabel('residual')
-        plt.savefig("Lasso_residuals.png", dpi=300)
+        plt.savefig("Lasso_predictions_vs_residuals.png", dpi=300)
         '''
         # LassoCV
         fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
@@ -1526,6 +1554,7 @@ def lasso(X, y, **kwargs):
             f"LassoLarsBIC predictions compared with actual values and residuals (RMSE={stats_bic['RMSE']:.3f})")
         plt.tight_layout()
         plt.savefig("LassoLarsBIC_predictions.png", dpi=300)
+        '''
 
     # Find the AIC and BIC of the LassoLarsAIC and LassoLarsBIC models
     min_index_aic = model_outputs['alpha_vs_AIC_BIC']['AIC'].idxmin()
@@ -2266,7 +2295,36 @@ def ridge(X, y, **kwargs):
 
     # residual plot for training error
     if data['verbose'] == 'on':
-        '''
+        # predicted vs actual
+        y_pred_cv = stats_cv['y_pred']
+        y_pred_aic = stats_aic['y_pred']
+        y_pred_bic = stats_bic['y_pred']
+        y_pred_vif = stats_vif['y_pred']
+        res_cv = stats_cv['residuals']
+        res_aic = stats_aic['residuals']
+        res_bic = stats_bic['residuals']
+        res_vif = stats_vif['residuals']
+        rmse_cv = stats_cv['RMSE']
+        rmse_aic = stats_aic['RMSE']
+        rmse_bic = stats_bic['RMSE']
+        rmse_vif = stats_vif['RMSE']
+        plt.figure()
+        plt.scatter(y_pred_cv, y, s=40, label=('RidgeCV (RMSE={:.2f})'.format(rmse_cv)))
+        plt.scatter(y_pred_aic, y, s=20, label=('RidgeAIC (RMSE={:.2f})'.format(rmse_aic)))
+        plt.scatter(y_pred_bic, y, s=10, label=('RidgeBIC (RMSE={:.2f})'.format(rmse_bic)))
+        plt.scatter(y_pred_vif, y, s=5, label=('RidgeVIF (RMSE={:.2f})'.format(rmse_vif)))
+
+        # plt.hlines(y=0, xmin=min(y), xmax=max(y), color='k')
+        y45 = np.linspace(min(y), max(y), 100)  # Adjust range as needed
+        x45 = y45  # 45-degree line: y = x
+        plt.plot(x45, y45, color="k")
+
+        plt.title("Actual vs. Predicted")
+        plt.legend();
+        plt.xlabel('y_pred')
+        plt.ylabel('y')
+        plt.savefig("Ridge_predicted_vs_actual.png", dpi=300)
+        # predicted vs residual
         y_pred_cv = stats_cv['y_pred']
         y_pred_aic = stats_aic['y_pred']
         y_pred_bic = stats_bic['y_pred']
@@ -2285,11 +2343,11 @@ def ridge(X, y, **kwargs):
         plt.scatter(y_pred_bic, (res_bic), s=10, label=('RidgeBIC (RMSE={:.2f})'.format(rmse_bic)))
         plt.scatter(y_pred_vif, (res_vif), s=5, label=('RidgeVIF (RMSE={:.2f})'.format(rmse_vif)))
         plt.hlines(y=0, xmin=min(y), xmax=max(y), color='k')
-        plt.title("Residual plot for training error")
+        plt.title("Residuals vs. Predicted")
         plt.legend();
         plt.xlabel('y_pred')
         plt.ylabel('residual')
-        plt.savefig("Ridge_residuals.png", dpi=300)
+        plt.savefig("Ridge_predicted_vs_residuals.png", dpi=300)
         '''
         # RidgeCV
         fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
@@ -2371,6 +2429,7 @@ def ridge(X, y, **kwargs):
             f"RidgeVIF predictions compared with actual values and residuals (RMSE={stats_vif['RMSE']:.3f})")
         plt.tight_layout()
         plt.savefig("RidgeVIF_predictions.png", dpi=300)
+        '''
 
     # Make the model_outputs dataframes
     list1_name = ['alpha','r-squared','adjusted r-squared',
@@ -2665,8 +2724,7 @@ def elastic(X, y, **kwargs):
 
     RETURNS
         model_objects, model_outputs
-            model_objects is the fitted model object from 
-                sklearn.linear_model ElasticNetCV
+            model_objects is the fitted model object
             model_outputs is a dictionary of the following outputs: 
                 - 'scaler': sklearn.preprocessing StandardScaler for X
                 - 'standardize': 'on' scaler was used for X, 'off' scaler not used
@@ -3080,8 +3138,7 @@ def stacking(X, y, **kwargs):
 
     RETURNS
         model_objects, model_outputs
-            model_objects is the fitted model object from 
-                sklearn.ensemble StackingRegressor
+            model_objects is the fitted model object
             model_outputs is a dictionary of the following outputs: 
                 - 'scaler': sklearn.preprocessing StandardScaler for X
                 - 'standardize': 'on' scaler was used for X, 'off' scaler not used
@@ -3444,8 +3501,7 @@ def svr(X, y, **kwargs):
 
     RETURNS
         model_objects, model_outputs
-            model_objects is the fitted model object from 
-                sklearn.ensemble StackingRegressor
+            model_objects is the fitted model object
             model_outputs is a dictionary of the following outputs: 
                 - 'scaler': sklearn.preprocessing StandardScaler for X
                 - 'standardize': 'on' scaler was used for X, 'off' scaler not used
@@ -3712,8 +3768,7 @@ def sgd(X, y, **kwargs):
 
     RETURNS
         model_objects, model_outputs
-            model_objects is the fitted model object from 
-                sklearn.ensemble StackingRegressor
+            model_objects is the fitted model object
             model_outputs is a dictionary of the following outputs: 
                 - 'scaler': sklearn.preprocessing StandardScaler for X
                 - 'standardize': 'on' scaler was used for X, 'off' scaler not used
@@ -3970,8 +4025,7 @@ def gbr(X, y, **kwargs):
 
     RETURNS
         model_objects, model_outputs
-            model_objects is the fitted model object from 
-                sklearn.ensemble StackingRegressor
+            model_objects is the fitted model object 
             model_outputs is a dictionary of the following outputs: 
                 - 'scaler': sklearn.preprocessing StandardScaler for X
                 - 'standardize': 'on' scaler was used for X, 'off' scaler not used
@@ -4236,6 +4290,356 @@ def gbr(X, y, **kwargs):
 
     return fitted_model, model_outputs
 
+def xgb(X, y, **kwargs):
+
+    """
+    Linear regression with XGBoost
+    Beta version
+
+    by
+    Greg Pelletier
+    gjpelletier@gmail.com
+    03-June-2025
+
+    REQUIRED INPUTS (X and y should have same number of rows and 
+    only contain real numbers)
+    X = dataframe of the candidate independent variables 
+        (as many columns of data as needed)
+    y = dataframe of the dependent variable (one column of data)
+
+    OPTIONAL KEYWORD ARGUMENTS
+    **kwargs (optional keyword arguments):
+        verbose= 'on' (default) or 'off' where
+            'on': provide model summary at each step
+            'off': provide model summary for only the final selected model
+        standardize= 'on' (default) or 'off' where
+            'on': standardize X using sklearn.preprocessing StandardScaler
+            'off': do not standardize X (only used if X is already standardized)
+        n_estimators= 100,          # Number of boosting rounds (trees).
+        max_depth= 6,               # Maximum depth of a tree.
+        learning_rate= 0.3,         # Step size shrinkage (also called eta).
+        verbosity= 1,               # Verbosity of output (0 = silent, 1 = warnings, 2 = info).
+        objective= "reg:squarederror",  # Loss function for regression.
+        booster= "gbtree",          # Type of booster ('gbtree', 'gblinear', or 'dart').
+        tree_method= "auto",        # Tree construction algorithm.
+        n_jobs= -1,                  # Number of parallel threads (-1 uses all cpus).
+        gamma= 0,                   # Minimum loss reduction to make a split.
+        min_child_weight= 1,        # Minimum sum of instance weight (hessian) needed in a child.
+        subsample= 1,               # Fraction of samples used for training each tree.
+        colsample_bytree= 1,        # Fraction of features used for each tree.
+        colsample_bylevel= 1,       # Fraction of features used per tree level.
+        colsample_bynode= 1,        # Fraction of features used per tree node.
+        reg_alpha= 0,               # L1 regularization term on weights.
+        reg_lambda= 1,              # L2 regularization term on weights.
+        scale_pos_weight= 1,        # Balancing of positive and negative weights.
+        base_score= 0.5,            # Initial prediction score (global bias).
+        random_state= 42,           # Random seed for reproducibility.
+        missing= np.nan,            # Value in the data to be treated as missing.
+        importance_type= "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
+        gpu_id= -1,                 # GPU device ID (-1 for CPU).
+        predictor= "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
+        enable_categorical= False   # Whether to enable categorical data support.    
+
+    Standardization is generally recommended
+
+    RETURNS
+        fitted_model, model_outputs
+            model_objects is the fitted model object
+            model_outputs is a dictionary of the following outputs: 
+                - 'scaler': sklearn.preprocessing StandardScaler for X
+                - 'standardize': 'on' scaler was used for X, 'off' scaler not used
+                - 'y_pred': Predicted y values
+                - 'residuals': Residuals (y-y_pred) for each of the four methods
+                - 'stats': Regression statistics for each model
+
+    NOTE
+    Do any necessary/optional cleaning of the data before 
+    passing the data to this function. X and y should have the same number of rows
+    and contain only real numbers with no missing values. X can contain as many
+    columns as needed, but y should only be one column. X should have unique
+    column names for for each column
+
+    EXAMPLE 
+    model_objects, model_outputs = xgb(X, y)
+
+    """
+
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    import time
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import cross_val_score, train_test_split
+    from sklearn.metrics import mean_squared_error
+    from sklearn.base import clone
+    from sklearn.metrics import PredictionErrorDisplay
+    from sklearn.model_selection import train_test_split
+    import matplotlib.pyplot as plt
+    import warnings
+    import sys
+    import statsmodels.api as sm
+    import xgboost as xgb
+    from xgboost import XGBRegressor
+
+    # Define default values of input data arguments
+    defaults = {
+        'standardize': 'on',
+        'verbose': 'on',
+        'n_estimators': 100,          # Number of boosting rounds (trees).
+        'max_depth': 6,               # Maximum depth of a tree.
+        'learning_rate': 0.3,         # Step size shrinkage (also called eta).
+        'verbosity': 1,               # Verbosity of output (0 = silent, 1 = warnings, 2 = info).
+        'objective': "reg:squarederror",  # Loss function for regression.
+        'booster': "gbtree",          # Type of booster ('gbtree', 'gblinear', or 'dart').
+        'tree_method': "auto",        # Tree construction algorithm.
+        'n_jobs': -1,                  # Number of parallel threads.
+        'gamma': 0,                   # Minimum loss reduction to make a split.
+        'min_child_weight': 1,        # Minimum sum of instance weight (hessian) needed in a child.
+        'subsample': 1,               # Fraction of samples used for training each tree.
+        'colsample_bytree': 1,        # Fraction of features used for each tree.
+        'colsample_bylevel': 1,       # Fraction of features used per tree level.
+        'colsample_bynode': 1,        # Fraction of features used per tree node.
+        'reg_alpha': 0,               # L1 regularization term on weights.
+        'reg_lambda': 1,              # L2 regularization term on weights.
+        'scale_pos_weight': 1,        # Balancing of positive and negative weights.
+        'base_score': 0.5,            # Initial prediction score (global bias).
+        'random_state': 42,           # Random seed for reproducibility.
+        'missing': np.nan,            # Value in the data to be treated as missing.
+        'importance_type': "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
+        'gpu_id': -1,                 # GPU device ID (-1 for CPU).
+        'predictor': "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
+        'enable_categorical': False   # Whether to enable categorical data support.    
+    }
+
+    # Update input data argumements with any provided keyword arguments in kwargs
+    data = {**defaults, **kwargs}
+
+    # check for input errors
+    ctrl = isinstance(X, pd.DataFrame)
+    if not ctrl:
+        print('Check X: it needs to be pandas dataframes!','\n')
+        sys.exit()
+    ctrl = (X.index == y.index).all()
+    if not ctrl:
+        print('Check X and y: they need to have the same index values!','\n')
+        sys.exit()
+    ctrl = np.isreal(X).all() and X.isna().sum().sum()==0 and X.ndim==2
+    if not ctrl:
+        print('Check X: it needs be a 2-D dataframe of real numbers with no nan values!','\n')
+        sys.exit()
+    ctrl = np.isreal(y).all() and y.isna().sum().sum()==0 and y.ndim==1
+    if not ctrl:
+        print('Check X: it needs be a 1-D dataframe of real numbers with no nan values!','\n')
+        sys.exit()
+    ctrl = X.shape[0] == y.shape[0]
+    if not ctrl:
+        print('Check X and y: X and y need to have the same number of rows!','\n')
+        sys.exit()
+    ctrl = X.columns.is_unique
+    if not ctrl:
+        print('Check X: X needs to have unique column names for every column!','\n')
+        sys.exit()
+
+    # Suppress warnings
+    warnings.filterwarnings('ignore')
+    print('Fitting XGBRegressor models, please wait ...')
+    if data['verbose'] == 'on':
+        print("\n")
+
+    # Set start time for calculating run time
+    start_time = time.time()
+
+    # check if X contains dummy variables
+    X_has_dummies = detect_dummy_variables(X)
+
+    # Initialize output dictionaries
+    model_objects = {}
+    model_outputs = {}
+
+    # Standardized X (X_scaled)
+    scaler = StandardScaler().fit(X)
+    X_scaled = scaler.transform(X)
+    # Convert scaled arrays into pandas dataframes with same column names as X
+    X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+    # Copy index from unscaled to scaled dataframes
+    X_scaled.index = X.index
+    # model_outputs['X_scaled'] = X_scaled                 # standardized X
+    model_outputs['scaler'] = scaler                     # scaler used to standardize X
+    model_outputs['standardize'] = data['standardize']   # 'on': X_scaled was used to fit, 'off': X was used
+
+    # Specify X to be used for fitting the models 
+    if data['standardize'] == 'on':
+        X = X_scaled.copy()
+    elif data['standardize'] == 'off':
+        X = X.copy()
+
+    fitted_model = XGBRegressor(
+        n_estimators= data['n_estimators'],          
+        max_depth= data['max_depth'],               
+        learning_rate= data['learning_rate'],         
+        verbosity= data['verbosity'],              
+        objective= data['objective'], 
+        booster= data['booster'],          
+        tree_method= data['tree_method'],        
+        n_jobs= data['n_jobs'],                  
+        gamma= data['gamma'],                   
+        min_child_weight= data['min_child_weight'],        
+        subsample= data['subsample'],               
+        colsample_bytree= data['colsample_bytree'],        
+        colsample_bylevel= data['colsample_bylevel'],       
+        colsample_bynode= data['colsample_bynode'],        
+        reg_alpha= data['reg_alpha'],               
+        reg_lambda= data['reg_lambda'],             
+        scale_pos_weight= data['scale_pos_weight'],        
+        base_score= data['base_score'],            
+        random_state= data['random_state'],         
+        missing= data['missing'],           
+        importance_type= data['importance_type'],    
+        gpu_id= data['gpu_id'],                 
+        predictor= data['predictor'],          
+        enable_categorical= data['enable_categorical']  
+        ).fit(X,y)
+    
+    '''
+    # Alternative fitting using cross_validated_model
+    # Initialize the GradientBoostingRegressor
+    model = GradientBoostingRegressor(random_state=data['random_state'])
+    
+    # Clone and fit the model to the entire dataset
+    fitted_model, mean_score = cross_validated_model(
+        model, X, y, cv=data['nfolds'], scoring=data['scoring'])
+    '''
+
+    '''
+    # Alternative fitting looping through random splits to pick best model
+    # fitted_model = GradientBoostingRegressor(random_state=data['random_state']).fit(X,y)
+    # Initialize variables to track the best model
+    best_model = None
+    best_rmse_diff = float('inf')
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42)        
+    # Iterate over the range of random seeds
+    # for n_estimators in n_estimators_range:
+    for seed in range(data['nfolds']):  # loop through random seeds for splitting
+        # random split of train and test subsets
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=seed)        
+        # Create and fit the model
+        model = GradientBoostingRegressor(
+            random_state=data['random_state'])
+        model.fit(X_train, y_train)
+        # Calculate RMSE for training and testing sets
+        train_rmse = np.sqrt(mean_squared_error(y_train, model.predict(X_train)))
+        test_rmse = np.sqrt(mean_squared_error(y_test, model.predict(X_test)))
+        # Calculate the absolute difference between train and test RMSE
+        rmse_diff = abs(train_rmse - test_rmse)
+        print(seed, rmse_diff, best_rmse_diff)
+        # Update the best model if the current one has a smaller RMSE difference
+        if rmse_diff < best_rmse_diff:
+            best_rmse_diff = rmse_diff
+            best_model = model
+    fitted_model = best_model
+    '''
+    
+    # check to see of the model has intercept and coefficients
+    if (hasattr(fitted_model, 'intercept_') and hasattr(fitted_model, 'coef_') 
+            and fitted_model.coef_.size==len(X.columns)):
+        intercept = fitted_model.intercept_
+        coefficients = fitted_model.coef_
+        # dataframe of model parameters, intercept and coefficients, including zero coefs
+        n_param = 1 + fitted_model.coef_.size               # number of parameters including intercept
+        popt = [['' for i in range(n_param)], np.full(n_param,np.nan)]
+        for i in range(n_param):
+            if i == 0:
+                popt[0][i] = 'Intercept'
+                popt[1][i] = model.intercept_
+            else:
+                popt[0][i] = X.columns[i-1]
+                popt[1][i] = model.coef_[i-1]
+        popt = pd.DataFrame(popt).T
+        popt.columns = ['Feature', 'Parameter']
+        # Table of intercept and coef
+        popt_table = pd.DataFrame({
+                "Feature": popt['Feature'],
+                "Parameter": popt['Parameter']
+            })
+        popt_table.set_index('Feature',inplace=True)
+        model_outputs['popt_table'] = popt_table
+    
+    # Calculate regression statistics
+    y_pred = fitted_model.predict(X)
+    stats = stats_given_y_pred(X,y,y_pred)
+    
+    # model objects and outputs returned by stacking
+    model_outputs['scaler'] = scaler                     # scaler used to standardize X
+    model_outputs['standardize'] = data['standardize']   # 'on': X_scaled was used to fit, 'off': X was used
+    model_outputs['y_pred'] = stats['y_pred']
+    model_outputs['residuals'] = stats['residuals']
+    # model_objects = model
+    
+    # residual plot for training error
+    if data['verbose'] == 'on':
+        fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
+        PredictionErrorDisplay.from_predictions(
+            y,
+            y_pred=stats['y_pred'],
+            kind="actual_vs_predicted",
+            ax=axs[0]
+        )
+        axs[0].set_title("Actual vs. Predicted")
+        PredictionErrorDisplay.from_predictions(
+            y,
+            y_pred=stats['y_pred'],
+            kind="residual_vs_predicted",
+            ax=axs[1]
+        )
+        axs[1].set_title("Residuals vs. Predicted")
+        fig.suptitle(
+            f"Predictions compared with actual values and residuals (RMSE={stats['RMSE']:.3f})")
+        plt.tight_layout()
+        # plt.show()
+        plt.savefig("XGBRegressor_predictions.png", dpi=300)
+    
+    # Make the model_outputs dataframes
+    list1_name = ['r-squared','adjusted r-squared',
+                        'n_samples','df residuals','df model',
+                        'F-statistic','Prob (F-statistic)','RMSE',
+                        'Log-Likelihood','AIC','BIC']
+    
+    
+    list1_val = [stats["rsquared"], stats["adj_rsquared"],
+                       stats["n_samples"], stats["df"], stats["dfn"], 
+                       stats["Fstat"], stats["pvalue"], stats["RMSE"],  
+                       stats["log_likelihood"],stats["aic"],stats["bic"]]
+    
+    stats = pd.DataFrame(
+        {
+            "Statistic": list1_name,
+            "XGBRegressor": list1_val
+        }
+        )
+    stats.set_index('Statistic',inplace=True)
+    model_outputs['stats'] = stats
+    print("XGBRegressor statistics of fitted ensemble model in model_outputs['stats']:")
+    print("\n")
+    print(model_outputs['stats'].to_markdown(index=True))
+    print("\n")
+    if hasattr(fitted_model, 'intercept_') and hasattr(fitted_model, 'coef_'):
+        print("Parameters of fitted model in model_outputs['popt']:")
+        print("\n")
+        print(model_outputs['popt_table'].to_markdown(index=True))
+        print("\n")
+
+    # Print the run time
+    fit_time = time.time() - start_time
+    print('Done')
+    print(f"Time elapsed: {fit_time:.2f} sec")
+
+    # Restore warnings to normal
+    warnings.filterwarnings("default")
+
+    return fitted_model, model_outputs
 
 
 

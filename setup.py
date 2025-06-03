@@ -8,5 +8,5 @@ setup(
     version=__version__,
     author='Greg Pelletier',
     py_modules=['MLRegression'], 
-    install_requires=['numpy','pandas','statsmodels','scikit-learn','tabulate','matplotlib'],
+    install_requires=['numpy','pandas','statsmodels','scikit-learn','tabulate','matplotlib','xgboost','lightgbm','mlxtend'],
 )
