@@ -1,6 +1,6 @@
 # Tools for Machine Learning Regression in Python
 
-The MLRegression module includes the following main Python functions to facilitate the use of sklearn, xgboost, and statsmodels solvers: 
+The MLRegression module includes the following main Python functions to facilitate the use of sklearn, XGBoost, LightGBM,  and statsmodels solvers: 
  
  - **lasso** - LassoCV, LassoLarsCV, and LassoLarsIC using AIC/BIC
  - **ridge** - RidgeCV, Ridge using AIC/BIC, Ridge using VIF
@@ -8,6 +8,7 @@ The MLRegression module includes the following main Python functions to facilita
  - **stacking** - StackingRegressor
  - **gbr** - GradientBoostingRegressor
  - **xgb** - XGBoostRegressor
+ - **lgbm** - LGBMRegressor
  - **stepwise** - Stepwise multiple linear regression to minimize MSE, AIC, or BIC
  
 The functions in the MLRegression module fit multiple linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
@@ -145,7 +146,7 @@ The **ridge** function in MLRegression includes an algorithm (RidgeVIF) to find 
 
 ## Installation for Python or Jupyter Notebook
 
-The MLRegression module require that you have already installed numpy, pandas, scikit-learn, tabulate, matplotlib, and statsmodels packages. 
+The MLRegression module require that you have already installed numpy, pandas, scikit-learn, tabulate, matplotlib, statsmodels, xgboost, lightgbm, and mlxtend packages. 
 
 If you have not already installed MLRegression, enter the following with pip or !pip in your notebook or terminal:<br>
 ```
