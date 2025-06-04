@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.08"
+__version__ = "1.1.09"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -2816,7 +2816,7 @@ def elastic(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting Elastic Net regression models, please wait ...')
+    print('Fitting Elastic Net regression model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -3602,7 +3602,7 @@ def svr(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting SVR models, please wait ...')
+    print('Fitting SVR model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -3738,7 +3738,7 @@ def svr(X, y, **kwargs):
         )
     stats.set_index('Statistic',inplace=True)
     model_outputs['stats'] = stats
-    print("SVR statistics of fitted ensemble model in model_outputs['stats']:")
+    print("SVR statistics of fitted model in model_outputs['stats']:")
     print("\n")
     print(model_outputs['stats'].to_markdown(index=True))
     print("\n")
@@ -3867,7 +3867,7 @@ def sgd(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting SGDRegressor models, please wait ...')
+    print('Fitting SGDRegressor model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -3994,7 +3994,7 @@ def sgd(X, y, **kwargs):
         )
     stats.set_index('Statistic',inplace=True)
     model_outputs['stats'] = stats
-    print("SGDRegressor statistics of fitted ensemble model in model_outputs['stats']:")
+    print("SGDRegressor statistics of fitted model in model_outputs['stats']:")
     print("\n")
     print(model_outputs['stats'].to_markdown(index=True))
     print("\n")
@@ -4176,7 +4176,7 @@ def gbr(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting GradientBoostingRegressor models, please wait ...')
+    print('Fitting GradientBoostingRegressor model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -4364,7 +4364,7 @@ def gbr(X, y, **kwargs):
         )
     stats.set_index('Statistic',inplace=True)
     model_outputs['stats'] = stats
-    print("GradientBoostingRegressor statistics of fitted ensemble model in model_outputs['stats']:")
+    print("GradientBoostingRegressor statistics of fitted model in model_outputs['stats']:")
     print("\n")
     print(model_outputs['stats'].to_markdown(index=True))
     print("\n")
@@ -4535,7 +4535,7 @@ def xgb(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting XGBRegressor models, please wait ...')
+    print('Fitting XGBRegressor model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -4713,7 +4713,7 @@ def xgb(X, y, **kwargs):
         )
     stats.set_index('Statistic',inplace=True)
     model_outputs['stats'] = stats
-    print("XGBRegressor statistics of fitted ensemble model in model_outputs['stats']:")
+    print("XGBRegressor statistics of fitted model in model_outputs['stats']:")
     print("\n")
     print(model_outputs['stats'].to_markdown(index=True))
     print("\n")
@@ -4876,7 +4876,7 @@ def lgbm(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    print('Fitting LGBMRegressor models, please wait ...')
+    print('Fitting LGBMRegressor model, please wait ...')
     if data['verbose'] == 'on':
         print("\n")
 
@@ -5051,7 +5051,7 @@ def lgbm(X, y, **kwargs):
         )
     stats.set_index('Statistic',inplace=True)
     model_outputs['stats'] = stats
-    print("LGBMRegressor statistics of fitted ensemble model in model_outputs['stats']:")
+    print("LGBMRegressor statistics of fitted model in model_outputs['stats']:")
     print("\n")
     print(model_outputs['stats'].to_markdown(index=True))
     print("\n")
