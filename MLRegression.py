@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.09"
+__version__ = "1.1.10"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -3056,7 +3056,7 @@ def elastic(X, y, **kwargs):
         print("\n")
         print(model_outputs['stats'].to_markdown(index=True))
         print("\n")
-        print("Coefficients of best models in model_outputs['popt']:")
+        print("Coefficients of best model in model_outputs['popt']:")
         print("\n")
         print(model_outputs['popt_table'].to_markdown(index=True))
         print("\n")
