@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.15"
+__version__ = "1.1.16"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -3439,6 +3439,8 @@ def stacking(X, y, **kwargs):
     '''
     list1_name = ['r-squared', 'RMSE', 'n_samples']        
     list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
+    list2_name = list(popt['name'])
+    list2_val = list(popt['param'])
     
     stats = pd.DataFrame(
         {
