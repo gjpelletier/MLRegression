@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.05"
+__version__ = "1.1.06"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -142,9 +142,7 @@ def stepwise(X, y, **kwargs):
             'r2': use the adjusted r-squared to score the model
             'p_coef': use p-values of coefficients to select features
                 using p_coef  as criterion automatically uses backward direction
-        verbose= 'on' (default) or 'off' where
-            'on': provide model summary at each step
-            'off': provide model summary for only the final selected model
+        verbose= 'on' (default) or 'off'
         direction= 'forward' (default), 'backward', or 'all' where
             'forward' (default): 
                 1) Start with no predictors in the model
@@ -1084,9 +1082,7 @@ def lasso(X, y, **kwargs):
         alpha_min= minimum value of range of alphas to evaluate (default=1e-3)
         alpha_max= maximum value of range of alphas to evaluate (default=1e3)
         n_alpha= number of log-spaced alphas to evaluate (default=100)
-        verbose= 'on' (default) or 'off' where
-            'on': display model summary on screen 
-            'off': turn off display of model summary on screen
+        verbose= 'on' (default) or 'off'
 
     Standardization is generally recommended for Lasso regression.
 
@@ -1925,9 +1921,7 @@ def ridge(X, y, **kwargs):
         alpha_max= maximum value of range of alphas to evaluate (default=1e3)
         n_alpha= number of log-spaced alphas to evaluate (default=100)
         vif_target= VIF target for use with RidgeVIF (default=1.0)
-        verbose= 'on' (default) or 'off' where
-            'on': display model summary on screen 
-            'off': turn off display of model summary on screen
+        verbose= 'on' (default) or 'off'
 
     Standardization is generally recommended for Ridge regression.
 
@@ -2706,9 +2700,7 @@ def elastic(X, y, **kwargs):
             the different values are tested by cross-validation 
             and the one giving the best prediction score is used. 
             default is l1_ratio= np.linspace(0.01,1,100)        
-        verbose= 'on' (default) or 'off' where
-            'on': display model summary on screen 
-            'off': turn off display of model summary on screen
+        verbose= 'on' (default) or 'off'
 
     Standardization is generally recommended for ElasticNet regression.
 
@@ -3130,9 +3122,7 @@ def stacking(X, y, **kwargs):
             svr= 'on' or 'off' (default)          - SVR(kernel='rbf')
             mlp= 'on' or 'off' (default)          - MLPRegressor
 
-        verbose= 'on' (default) or 'off' where
-            'on': display model summary on screen 
-            'off': turn off display of model summary on screen
+        verbose= 'on' (default) or 'off'
 
     Standardization is generally recommended
 
@@ -4019,7 +4009,28 @@ def gbr(X, y, **kwargs):
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
         random_state= (default random_state=42)        - initial random seed
-        nfolds= number of folds to use for cross-validation (CV)
+        loss='squared_error',          # Loss function to optimize. Default is 'squared_error' (mean squared error).
+        learning_rate=0.1,             # Shrinks the contribution of each tree. Default is 0.1.
+        n_estimators=100,              # Number of boosting stages (trees). Default is 100.
+        subsample=1.0,                 # Fraction of samples used for fitting each tree. Default is 1.0 (use all samples).
+        criterion='friedman_mse',      # Function to measure the quality of a split. Default is 'friedman_mse'.
+        min_samples_split=2,           # Minimum samples required to split an internal node. Default is 2.
+        min_samples_leaf=1,            # Minimum samples required to be a leaf node. Default is 1.
+        min_weight_fraction_leaf=0.0,  # Minimum weighted fraction of the sum of weights for a leaf node. Default is 0.0.
+        max_depth=3,                   # Maximum depth of the individual regression estimators. Default is 3.
+        min_impurity_decrease=0.0,     # Minimum impurity decrease required to split a node. Default is 0.0.
+        init=None,                     # Initial estimator (e.g., a constant predictor). Default is None.
+        random_state=None,             # Seed for reproducibility. Default is None.
+        max_features=None,             # Number of features to consider for the best split. Default is None (all features).
+        alpha=0.9,                     # Quantile for 'huber' and 'quantile' loss functions. Default is 0.9.
+        verbose=0,                     # Verbosity level. Default is 0 (no output).
+        max_leaf_nodes=None,           # Maximum number of leaf nodes. Default is None (unlimited).
+        warm_start=False,              # Reuse previous solution to add more estimators. Default is False.
+        validation_fraction=0.1,       # Fraction of training data for validation. Default is 0.1.
+        n_iter_no_change=None,         # Stop training if no improvement after this many iterations. Default is None.
+        tol=1e-4,                      # Tolerance for early stopping. Default is 1e-4.
+        ccp_alpha=0.0                  # Complexity parameter for Minimal Cost-Complexity Pruning. Default is 0.0.
+
 
     Standardization is generally recommended
 
@@ -4067,8 +4078,29 @@ def gbr(X, y, **kwargs):
         'standardize': 'on',
         'random_state': 42,
         'nfolds': 20,
-        'scoring': 'neg_mean_squared_error',     #  'accuracy','neg_mean_squared_error', 
-        'verbose': 'on'
+        'verbose': 'on',
+        'random_state':  42,              # initial random seed
+        'loss': 'squared_error',          # Loss function to optimize. Default is 'squared_error' (mean squared error).
+        'learning_rate': 0.1,             # Shrinks the contribution of each tree. Default is 0.1.
+        'n_estimators': 100,              # Number of boosting stages (trees). Default is 100.
+        'subsample': 1.0,                 # Fraction of samples used for fitting each tree. Default is 1.0 (use all samples).
+        'criterion': 'friedman_mse',      # Function to measure the quality of a split. Default is 'friedman_mse'.
+        'min_samples_split': 2,           # Minimum samples required to split an internal node. Default is 2.
+        'min_samples_leaf': 1,            # Minimum samples required to be a leaf node. Default is 1.
+        'min_weight_fraction_leaf': 0.0,  # Minimum weighted fraction of the sum of weights for a leaf node. Default is 0.0.
+        'max_depth': 3,                   # Maximum depth of the individual regression estimators. Default is 3.
+        'min_impurity_decrease': 0.0,     # Minimum impurity decrease required to split a node. Default is 0.0.
+        'init': None,                     # Initial estimator (e.g., a constant predictor). Default is None.
+        'random_state': None,             # Seed for reproducibility. Default is None.
+        'max_features': None,             # Number of features to consider for the best split. Default is None (all features).
+        'alpha': 0.9,                     # Quantile for 'huber' and 'quantile' loss functions. Default is 0.9.
+        'verbosity': 0,                     # Verbosity level. Default is 0 (no output).
+        'max_leaf_nodes': None,           # Maximum number of leaf nodes. Default is None (unlimited).
+        'warm_start': False,              # Reuse previous solution to add more estimators. Default is False.
+        'validation_fraction': 0.1,       # Fraction of training data for validation. Default is 0.1.
+        'n_iter_no_change': None,         # Stop training if no improvement after this many iterations. Default is None.
+        'tol': 1e-4,                      # Tolerance for early stopping. Default is 1e-4.
+        'ccp_alpha': 0.0                  # Complexity parameter for Minimal Cost-Complexity Pruning. Default is 0.0.
         }
 
     # Update input data argumements with any provided keyword arguments in kwargs
@@ -4134,7 +4166,27 @@ def gbr(X, y, **kwargs):
         X = X.copy()
 
     fitted_model = GradientBoostingRegressor(
-        random_state=data['random_state']).fit(X,y)
+        random_state=data['random_state'],
+        loss= data['loss'],          
+        learning_rate= data['learning_rate'],             
+        n_estimators= data['n_estimators'],              
+        subsample= data['subsample'],                 
+        criterion= data['criterion'],      
+        min_samples_split= data['min_samples_split'],           
+        min_samples_leaf= data['min_samples_leaf'],            
+        min_weight_fraction_leaf= data['min_weight_fraction_leaf'],  
+        max_depth= data['max_depth'],                   
+        min_impurity_decrease= data['min_impurity_decrease'],     
+        init= data['init'],                     
+        max_features= data['max_features'],             
+        alpha= data['alpha'],                     
+        max_leaf_nodes= data['max_leaf_nodes'],           
+        warm_start= data['warm_start'],              
+        validation_fraction= data['validation_fraction'],       
+        n_iter_no_change= data['n_iter_no_change'],         
+        tol= data['tol'],                      
+        ccp_alpha= data['ccp_alpha']                          
+        ).fit(X,y)
     
     '''
     # Alternative fitting using cross_validated_model
@@ -4309,9 +4361,7 @@ def xgb(X, y, **kwargs):
 
     OPTIONAL KEYWORD ARGUMENTS
     **kwargs (optional keyword arguments):
-        verbose= 'on' (default) or 'off' where
-            'on': provide model summary at each step
-            'off': provide model summary for only the final selected model
+        verbose= 'on' (default) or 'off'
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
@@ -4660,9 +4710,7 @@ def lgbm(X, y, **kwargs):
 
     OPTIONAL KEYWORD ARGUMENTS
     **kwargs (optional keyword arguments):
-        verbose= 'on' (default) or 'off' where
-            'on': provide model summary at each step
-            'off': provide model summary for only the final selected model
+        verbose= 'on' (default) or 'off'
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
@@ -4752,7 +4800,6 @@ def lgbm(X, y, **kwargs):
         'reg_lambda': 0.0,        # L2 regularization term on weights
         'random_state': 42,       # Random seed for reproducibility
         'n_jobs': -1,             # Number of parallel threads (-1 uses all available cores)
-        # 'silent': 'warn',         # Deprecated, use verbosity instead
         'importance_type': 'split' # Type of feature importance ('split' or 'gain')
         }
 
