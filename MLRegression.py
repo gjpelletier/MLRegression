@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.06"
+__version__ = "1.1.07"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4009,27 +4009,41 @@ def gbr(X, y, **kwargs):
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
         random_state= (default random_state=42)        - initial random seed
-        loss='squared_error',          # Loss function to optimize. Default is 'squared_error' (mean squared error).
+        loss='squared_error',          # Loss function to optimize. 
+                                       # Default is 'squared_error' (mean squared error).
         learning_rate=0.1,             # Shrinks the contribution of each tree. Default is 0.1.
         n_estimators=100,              # Number of boosting stages (trees). Default is 100.
-        subsample=1.0,                 # Fraction of samples used for fitting each tree. Default is 1.0 (use all samples).
-        criterion='friedman_mse',      # Function to measure the quality of a split. Default is 'friedman_mse'.
-        min_samples_split=2,           # Minimum samples required to split an internal node. Default is 2.
-        min_samples_leaf=1,            # Minimum samples required to be a leaf node. Default is 1.
-        min_weight_fraction_leaf=0.0,  # Minimum weighted fraction of the sum of weights for a leaf node. Default is 0.0.
-        max_depth=3,                   # Maximum depth of the individual regression estimators. Default is 3.
-        min_impurity_decrease=0.0,     # Minimum impurity decrease required to split a node. Default is 0.0.
-        init=None,                     # Initial estimator (e.g., a constant predictor). Default is None.
+        subsample=1.0,                 # Fraction of samples used for fitting each tree. 
+                                       # Default is 1.0 (use all samples).
+        criterion='friedman_mse',      # Function to measure the quality of a split. 
+                                       # Default is 'friedman_mse'.
+        min_samples_split=2,           # Minimum samples required to split an internal node. 
+                                       # Default is 2.
+        min_samples_leaf=1,            # Minimum samples required to be a leaf node. 
+                                       # Default is 1.
+        min_weight_fraction_leaf=0.0,  # Minimum weighted fraction of the sum of weights 
+                                       # for a leaf node. Default is 0.0.
+        max_depth=3,                   # Maximum depth of the individual regression estimators. 
+                                       # Default is 3.
+        min_impurity_decrease=0.0,     # Minimum impurity decrease required to split a node. 
+                                       # Default is 0.0.
+        init=None,                     # Initial estimator (e.g., a constant predictor). 
+                                       # Default is None.
         random_state=None,             # Seed for reproducibility. Default is None.
-        max_features=None,             # Number of features to consider for the best split. Default is None (all features).
-        alpha=0.9,                     # Quantile for 'huber' and 'quantile' loss functions. Default is 0.9.
+        max_features=None,             # Number of features to consider for the best split. 
+                                       # Default is None (all features).
+        alpha=0.9,                     # Quantile for 'huber' and 'quantile' loss functions. 
+                                       # Default is 0.9.
         verbose=0,                     # Verbosity level. Default is 0 (no output).
         max_leaf_nodes=None,           # Maximum number of leaf nodes. Default is None (unlimited).
-        warm_start=False,              # Reuse previous solution to add more estimators. Default is False.
+        warm_start=False,              # Reuse previous solution to add more estimators. 
+                                       # Default is False.
         validation_fraction=0.1,       # Fraction of training data for validation. Default is 0.1.
-        n_iter_no_change=None,         # Stop training if no improvement after this many iterations. Default is None.
+        n_iter_no_change=None,         # Stop training if no improvement after this many iterations. 
+                                       # Default is None.
         tol=1e-4,                      # Tolerance for early stopping. Default is 1e-4.
-        ccp_alpha=0.0                  # Complexity parameter for Minimal Cost-Complexity Pruning. Default is 0.0.
+        ccp_alpha=0.0                  # Complexity parameter for Minimal Cost-Complexity Pruning. 
+                                       # Default is 0.0.
 
 
     Standardization is generally recommended
