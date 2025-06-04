@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.10"
+__version__ = "1.1.11"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4407,6 +4407,7 @@ def xgb(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
+        booster= 'gbtree',          # 'gbtree', 'gblineaer', 'dart'
         n_estimators= 100,          # Number of boosting rounds (trees).
         max_depth= 6,               # Maximum depth of a tree.
         learning_rate= 0.3,         # Step size shrinkage (also called eta).
@@ -4414,7 +4415,7 @@ def xgb(X, y, **kwargs):
         objective= "reg:squarederror",  # Loss function for regression.
         booster= "gbtree",          # Type of booster ('gbtree', 'gblinear', or 'dart').
         tree_method= "auto",        # Tree construction algorithm.
-        n_jobs= -1,                  # Number of parallel threads (-1 uses all cpus).
+        nthread= -1,                # Number of parallel threads (-1 uses all cpus).
         gamma= 0,                   # Minimum loss reduction to make a split.
         min_child_weight= 1,        # Minimum sum of instance weight (hessian) needed in a child.
         subsample= 1,               # Fraction of samples used for training each tree.
@@ -4428,7 +4429,7 @@ def xgb(X, y, **kwargs):
         random_state= 42,           # Random seed for reproducibility.
         missing= np.nan,            # Value in the data to be treated as missing.
         importance_type= "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
-        gpu_id= -1,                 # GPU device ID (-1 for CPU).
+        device= 'cpu',              # 'cpu', 'cuda', 'cuda:<ordinal>', 'gpu', 'gpu:<ordinal>' 
         predictor= "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
         enable_categorical= False   # Whether to enable categorical data support.    
 
@@ -4478,18 +4479,19 @@ def xgb(X, y, **kwargs):
     defaults = {
         'standardize': 'on',
         'verbose': 'on',
+        'booster': 'gbtree',          # 'gbtree', 'gblineaer', 'dart'
         'n_estimators': 100,          # Number of boosting rounds (trees).
-        'max_depth': 6,               # Maximum depth of a tree.
-        'learning_rate': 0.3,         # Step size shrinkage (also called eta).
+        'max_depth': 3,               # Maximum depth of a tree.
+        'learning_rate': 0.05,         # Step size shrinkage (also called eta).
         'verbosity': 1,               # Verbosity of output (0 = silent, 1 = warnings, 2 = info).
         'objective': "reg:squarederror",  # Loss function for regression.
         'booster': "gbtree",          # Type of booster ('gbtree', 'gblinear', or 'dart').
         'tree_method': "auto",        # Tree construction algorithm.
-        'n_jobs': -1,                  # Number of parallel threads.
+        'nthread': -1,                  # Number of parallel threads.
         'gamma': 0,                   # Minimum loss reduction to make a split.
-        'min_child_weight': 1,        # Minimum sum of instance weight (hessian) needed in a child.
-        'subsample': 1,               # Fraction of samples used for training each tree.
-        'colsample_bytree': 1,        # Fraction of features used for each tree.
+        'min_child_weight': 0,        # Minimum sum of instance weight (hessian) needed in a child.
+        'subsample': 0.7,               # Fraction of samples used for training each tree.
+        'colsample_bytree': 0.7,        # Fraction of features used for each tree.
         'colsample_bylevel': 1,       # Fraction of features used per tree level.
         'colsample_bynode': 1,        # Fraction of features used per tree node.
         'reg_alpha': 0,               # L1 regularization term on weights.
@@ -4499,7 +4501,7 @@ def xgb(X, y, **kwargs):
         'random_state': 42,           # Random seed for reproducibility.
         'missing': np.nan,            # Value in the data to be treated as missing.
         'importance_type': "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
-        'gpu_id': -1,                 # GPU device ID (-1 for CPU).
+        'device': 'cpu',              # cpu, cuda, cuda:<ordinal>, gpu, gpu:<ordinal> 
         'predictor': "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
         'enable_categorical': False   # Whether to enable categorical data support.    
     }
@@ -4567,6 +4569,7 @@ def xgb(X, y, **kwargs):
         X = X.copy()
 
     fitted_model = XGBRegressor(
+        booster= data['booster'],          
         n_estimators= data['n_estimators'],          
         max_depth= data['max_depth'],               
         learning_rate= data['learning_rate'],         
@@ -4574,7 +4577,7 @@ def xgb(X, y, **kwargs):
         objective= data['objective'], 
         booster= data['booster'],          
         tree_method= data['tree_method'],        
-        n_jobs= data['n_jobs'],                  
+        nthread= data['nthread'],                  
         gamma= data['gamma'],                   
         min_child_weight= data['min_child_weight'],        
         subsample= data['subsample'],               
@@ -4588,7 +4591,7 @@ def xgb(X, y, **kwargs):
         random_state= data['random_state'],         
         missing= data['missing'],           
         importance_type= data['importance_type'],    
-        gpu_id= data['gpu_id'],                 
+        device= data['device'],                 
         predictor= data['predictor'],          
         enable_categorical= data['enable_categorical']  
         ).fit(X,y)
