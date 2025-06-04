@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.13"
+__version__ = "1.1.14"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4795,7 +4795,6 @@ def lgbm(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
-        gpu= True (default) or False to autodetect if the computer has a gpu and use it
         boosting_type='gbdt',  # Gradient Boosting Decision Tree (default boosting method)
         num_leaves=31,         # Maximum number of leaves in one tree
         max_depth=-1,          # No limit on tree depth (-1 means no limit)
@@ -4863,7 +4862,6 @@ def lgbm(X, y, **kwargs):
     defaults = {
         'standardize': 'on',
         'verbose': 'on',
-        'gpu': True,              # Autodetect if the computer has a gpu, if no gpu is detected then cpu will be used
         'verbosity': -1,  # -1 to turn off lgbm warnings
         'boosting_type': 'gbdt',  # Gradient Boosting Decision Tree (default boosting method)
         'num_leaves': 31,         # Maximum number of leaves in one tree
@@ -4889,6 +4887,7 @@ def lgbm(X, y, **kwargs):
     # Update input data argumements with any provided keyword arguments in kwargs
     data = {**defaults, **kwargs}
 
+    '''
     if data['gpu']:
         has_gpu = check_gpu()
         if has_gpu:
@@ -4897,6 +4896,7 @@ def lgbm(X, y, **kwargs):
             data['device_type'] = 'cpu'
     else:
         data['device_type'] = 'cpu'
+    '''
 
     # check for input errors
     ctrl = isinstance(X, pd.DataFrame)
@@ -4958,7 +4958,6 @@ def lgbm(X, y, **kwargs):
         X = X.copy()
 
     fitted_model = LGBMRegressor(
-        device_type= data['device_type'],
         verbosity= data['verbosity'],
         boosting_type= data['boosting_type'],
         num_leaves= data['num_leaves'],         
