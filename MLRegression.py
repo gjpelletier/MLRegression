@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.14"
+__version__ = "1.1.15"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -5082,16 +5082,18 @@ def lgbm(X, y, **kwargs):
         plt.savefig("LGBMRegressor_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-    
-    
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
