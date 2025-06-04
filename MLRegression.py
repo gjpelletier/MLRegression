@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.07"
+__version__ = "1.1.08"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -3484,8 +3484,21 @@ def svr(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
-        gamma= 'scale' (default), 'auto', or float (if float, must be non-negative)
-        epsilon= float, default 0.1
+        standardize= 'on' (default) or 'off' 
+        verbose= 'on' (default) or 'off' 
+        kernel= 'rbf'      # ‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’} 
+                           # or callable, default=’rbf’
+        degree= 3          # int, default 3, deg of polynomial, used only if kernel='poly'
+        gamma= 'scale'     # 'scale' (default), 'auto', or float (if float, must be non-negative)
+        coef0= 0.0         # term in kernel function, only significant in ‘poly’ and ‘sigmoid’
+        tol= 0.001         # Tolerance for stopping criterion
+        C= 1.0             # Regularization parameter. The strength of the regularization 
+                           # is inversely proportional to C. Must be strictly positive
+                           # The penalty is a squared L2. 
+        epsilon= 0.1       # float, default 0.1, the epsilon-SVR model, must be non-negative
+        shrinking= True    # Whether to use the shrinking heuristic
+        cache_size= 200    # Specify the size of the kernel cache (in MB)
+        max_iter= -1       # Hard limit on iterations within solver, or -1 for no limit.
 
     Standardization is generally recommended
 
@@ -3537,10 +3550,17 @@ def svr(X, y, **kwargs):
     # Define default values of input data arguments
     defaults = {
         'standardize': 'on',
-        'random_state': 42,
+        'verbose': 'on',
+        'kernel': 'rbf',
+        'degree': 3,
         'gamma': 'scale',
+        'coef0': 0.0,
+        'tol': 0.001,
+        'C': 1.0,
         'epsilon': 0.1,
-        'verbose': 'on'
+        'shrinking': True,
+        'cache_size': 200,
+        'max_iter': -1
         }
 
     # Update input data argumements with any provided keyword arguments in kwargs
@@ -3614,8 +3634,17 @@ def svr(X, y, **kwargs):
         X = X.copy()
     
     model = SVR(
-        gamma=data['gamma'],
-        epsilon=data['epsilon']).fit(X,y)
+        gamma= data['gamma'],
+        epsilon= data['epsilon'],
+        kernel= data['kernel'],                                  
+        degree= data['degree'],    
+        coef0= data['coef0'],    
+        tol= data['tol'],         
+        C= data['C'],                                                                   
+        shrinking= data['shrinking'],    
+        cache_size= data['cache_size'],    
+        max_iter= data['max_iter']      
+        ).fit(X,y)
 
     # check to see of the model has intercept and coefficients
     if (hasattr(model, 'intercept_') and hasattr(model, 'coef_') 
@@ -3695,8 +3724,7 @@ def svr(X, y, **kwargs):
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
                         'Log-Likelihood','AIC','BIC']
-    
-    
+        
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
