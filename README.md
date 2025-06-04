@@ -147,7 +147,7 @@ The **ridge** function in MLRegression includes an algorithm (RidgeVIF) to find 
 
 ## Installation for Python or Jupyter Notebook
 
-The MLRegression module require that you have already installed numpy, pandas, scikit-learn, tabulate, matplotlib, statsmodels, xgboost, lightgbm, and mlxtend packages. 
+The MLRegression module require that you have already installed numpy, pandas, scikit-learn, tabulate, matplotlib, statsmodels, xgboost, lightgbm, mlxtend, and optuna packages. 
 
 If you have not already installed MLRegression, enter the following with pip or !pip in your notebook or terminal:<br>
 ```
