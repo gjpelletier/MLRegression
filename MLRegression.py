@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.11"
+__version__ = "1.1.12"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4407,7 +4407,6 @@ def xgb(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
-        booster= 'gbtree',          # 'gbtree', 'gblineaer', 'dart'
         n_estimators= 100,          # Number of boosting rounds (trees).
         max_depth= 6,               # Maximum depth of a tree.
         learning_rate= 0.3,         # Step size shrinkage (also called eta).
@@ -4479,7 +4478,6 @@ def xgb(X, y, **kwargs):
     defaults = {
         'standardize': 'on',
         'verbose': 'on',
-        'booster': 'gbtree',          # 'gbtree', 'gblineaer', 'dart'
         'n_estimators': 100,          # Number of boosting rounds (trees).
         'max_depth': 3,               # Maximum depth of a tree.
         'learning_rate': 0.05,         # Step size shrinkage (also called eta).
@@ -4569,7 +4567,6 @@ def xgb(X, y, **kwargs):
         X = X.copy()
 
     fitted_model = XGBRegressor(
-        booster= data['booster'],          
         n_estimators= data['n_estimators'],          
         max_depth= data['max_depth'],               
         learning_rate= data['learning_rate'],         
