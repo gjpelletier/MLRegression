@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.12"
+__version__ = "1.1.13"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -97,6 +97,27 @@ def detect_dummy_variables(df, sep=None):
             pass
 
     return False
+
+def check_gpu():
+    '''
+    Check if the computer as an nvidia gpu
+    returns boolean has_gpu= True or False to indicate if the computer has a gpu or not
+    '''
+    import subprocess
+    try:
+        result = subprocess.run(["nvidia-smi"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.returncode == 0:
+            # print("GPU detected: NVIDIA GPU is available.")
+            # print(result.stdout)
+            has_gpu = True
+        else:
+            # print("No NVIDIA GPU detected or `nvidia-smi` not installed.")
+            has_gpu = False
+    except FileNotFoundError:
+        # print("`nvidia-smi` command not found. Ensure NVIDIA drivers are installed.")
+        has_gpu = False
+        print("Auto-detect gpu failed, try using keyword argument gpu=False")
+    return has_gpu
 
 def nnn(x):
 
@@ -3150,7 +3171,7 @@ def stacking(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -3406,18 +3427,18 @@ def stacking(X, y, **kwargs):
 
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-    list2_name = list(popt['name'])
-    
-    
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
-    list2_val = list(popt['param'])
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
@@ -3524,7 +3545,7 @@ def svr(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -3720,15 +3741,18 @@ def svr(X, y, **kwargs):
         plt.savefig("SVR_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-        
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
@@ -3806,7 +3830,7 @@ def sgd(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -3975,16 +3999,18 @@ def sgd(X, y, **kwargs):
         plt.savefig("SGDRegressor_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-    
-    
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
@@ -4098,7 +4124,7 @@ def gbr(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -4345,16 +4371,18 @@ def gbr(X, y, **kwargs):
         plt.savefig("GradientBoostingRegressor_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-    
-    
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
@@ -4407,6 +4435,7 @@ def xgb(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
+        gpu= True (default) or False to autodetect if the computer has a gpu and use it
         n_estimators= 100,          # Number of boosting rounds (trees).
         max_depth= 6,               # Maximum depth of a tree.
         learning_rate= 0.3,         # Step size shrinkage (also called eta).
@@ -4428,7 +4457,6 @@ def xgb(X, y, **kwargs):
         random_state= 42,           # Random seed for reproducibility.
         missing= np.nan,            # Value in the data to be treated as missing.
         importance_type= "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
-        device= 'cpu',              # 'cpu', 'cuda', 'cuda:<ordinal>', 'gpu', 'gpu:<ordinal>' 
         predictor= "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
         enable_categorical= False   # Whether to enable categorical data support.    
 
@@ -4456,7 +4484,7 @@ def xgb(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -4478,6 +4506,7 @@ def xgb(X, y, **kwargs):
     defaults = {
         'standardize': 'on',
         'verbose': 'on',
+        'gpu': True,                  # Autodetect if the computer has a gpu, if no gpu is detected then cpu will be used
         'n_estimators': 100,          # Number of boosting rounds (trees).
         'max_depth': 3,               # Maximum depth of a tree.
         'learning_rate': 0.05,         # Step size shrinkage (also called eta).
@@ -4499,13 +4528,21 @@ def xgb(X, y, **kwargs):
         'random_state': 42,           # Random seed for reproducibility.
         'missing': np.nan,            # Value in the data to be treated as missing.
         'importance_type': "gain",    # Feature importance type ('weight', 'gain', 'cover', 'total_gain', 'total_cover').
-        'device': 'cpu',              # cpu, cuda, cuda:<ordinal>, gpu, gpu:<ordinal> 
         'predictor': "auto",          # Type of predictor ('cpu_predictor', 'gpu_predictor').
         'enable_categorical': False   # Whether to enable categorical data support.    
     }
 
     # Update input data argumements with any provided keyword arguments in kwargs
     data = {**defaults, **kwargs}
+
+    if data['gpu']:
+        has_gpu = check_gpu()
+        if has_gpu:
+            data['device'] = 'gpu'
+        else:
+            data['device'] = 'cpu'
+    else:
+        data['device'] = 'cpu'
 
     # check for input errors
     ctrl = isinstance(X, pd.DataFrame)
@@ -4694,16 +4731,18 @@ def xgb(X, y, **kwargs):
         plt.savefig("XGBRegressor_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    '''
     list1_name = ['r-squared','adjusted r-squared',
                         'n_samples','df residuals','df model',
                         'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']
-    
-    
+                        'Log-Likelihood','AIC','BIC']    
     list1_val = [stats["rsquared"], stats["adj_rsquared"],
                        stats["n_samples"], stats["df"], stats["dfn"], 
                        stats["Fstat"], stats["pvalue"], stats["RMSE"],  
                        stats["log_likelihood"],stats["aic"],stats["bic"]]
+    '''
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
     stats = pd.DataFrame(
         {
@@ -4756,6 +4795,7 @@ def lgbm(X, y, **kwargs):
         standardize= 'on' (default) or 'off' where
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
+        gpu= True (default) or False to autodetect if the computer has a gpu and use it
         boosting_type='gbdt',  # Gradient Boosting Decision Tree (default boosting method)
         num_leaves=31,         # Maximum number of leaves in one tree
         max_depth=-1,          # No limit on tree depth (-1 means no limit)
@@ -4801,7 +4841,7 @@ def lgbm(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -4823,6 +4863,7 @@ def lgbm(X, y, **kwargs):
     defaults = {
         'standardize': 'on',
         'verbose': 'on',
+        'gpu': True,              # Autodetect if the computer has a gpu, if no gpu is detected then cpu will be used
         'verbosity': -1,  # -1 to turn off lgbm warnings
         'boosting_type': 'gbdt',  # Gradient Boosting Decision Tree (default boosting method)
         'num_leaves': 31,         # Maximum number of leaves in one tree
@@ -4847,6 +4888,15 @@ def lgbm(X, y, **kwargs):
 
     # Update input data argumements with any provided keyword arguments in kwargs
     data = {**defaults, **kwargs}
+
+    if data['gpu']:
+        has_gpu = check_gpu()
+        if has_gpu:
+            data['device_type'] = 'gpu'
+        else:
+            data['device_type'] = 'cpu'
+    else:
+        data['device_type'] = 'cpu'
 
     # check for input errors
     ctrl = isinstance(X, pd.DataFrame)
@@ -4908,6 +4958,7 @@ def lgbm(X, y, **kwargs):
         X = X.copy()
 
     fitted_model = LGBMRegressor(
+        device_type= data['device_type'],
         verbosity= data['verbosity'],
         boosting_type= data['boosting_type'],
         num_leaves= data['num_leaves'],         
