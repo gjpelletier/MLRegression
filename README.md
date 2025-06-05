@@ -7,7 +7,7 @@ The MLRegression module includes the following main Python functions to facilita
  - **elastic** - ElasticNetCV
  - **gbr** - GradientBoostingRegressor with user-specified hyper-parameters
  - **xgb** - XGBoostRegressor with user-specified hyper-parameters
- - **xgb_auto** - XGBoostRegressor with automatic calibration of the best hyper-parameters using optuna
+ - **xgb_auto** - XGBoostRegressor with automatic cross-validated calibration of the best hyper-parameters using optuna
  - **lgbm** - LGBMRegressor with user-specified hyper-parameters
  - **svr** - SVR - Epsilon-Support Vector Regression with user-specified hyper-parameters
  - **stacking** - StackingRegressor
@@ -23,7 +23,7 @@ The functions in the MLRegression module allow the user to write one line of pyt
 - variance  inflation factors (if applicable)
 - plots of predicted vs actual and predicted vs residuals
 - figures showing other diagnostic descriptions of the analysis if applicable (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha)
-- automatic calibration of hyper-parameters
+- automatic cross-validated calibration of hyper-parameters (e.g. XGBoost)
 - scaler used to standardize X (if applicable)
 - automatic detection and use of GPU for 10x faster computations (XGBoost only)
 
@@ -167,7 +167,34 @@ Next import the **stepwise**, **lasso**, **ridge**, and **elastic** functions fr
 from MLRegression import stepwise, lasso, ridge, elastic
 ```
 
-## Example 1. Use Lasso regression to analyze diabetes data
+## Example 1. Automatic calibration of XGBoost to analyze diabetes data
+
+In this example we will use **xgb_auto** to automatically calibrate the XGBoost parameters using cross-validation. The xgb_auto function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the xgb_auto function finds the best fitting cross-validated hyper-parameters for XGBoost.
+
+Run the following code:
+```
+# Read X and y from the sklearn diabetes data set
+from sklearn.datasets import load_diabetes
+X, y = load_diabetes(return_X_y=True, as_frame=True)
+
+# Use the lasso function in the MLRegression module
+from MLRegression import xgb_auto
+model_objects, model_outputs = xgb_auto(X, y)
+```
+
+Running the code above produces the following display of output tables with regression statistics:
+```
+| Statistic   |   XGBRegressor |
+|:------------|---------------:|
+| r-squared   |       0.822423 |
+| RMSE        |      32.4501   |
+| n_samples   |     442        |
+```
+
+![XGBRegressor_predictions](https://github.com/user-attachments/assets/18c35b98-daed-4efa-81ba-d0b6e7006fed)
+
+
+## Example 2. Use Lasso regression to analyze diabetes data
 
 In this example we will use Lasso regression to analyze the diabetes data available from sklearn. The lasso function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the lasso function uses the standardized X values to find each of the best fit models using LassoCV, LassoLarsCV, LassoLarsIC using AIC, and LassoLarsIC using BIC.
 
@@ -242,7 +269,7 @@ Note: VIF>5 indicates excessive collinearity
 
 The model_objects and model_outputs returned by the lasso function also contain the best-fit sklearn model objects and many other useful outputs as described by help(lasso). All of the optional arguments for the lasso function are also explained by running help(lasso) 
 
-## Example 2. Use Stepwise regression to analyze diabetes data
+## Example 3. Use Stepwise regression to analyze diabetes data
 
 In this example we will use Stepwise regression to analyze the diabetes data available from sklearn.
 
@@ -327,11 +354,7 @@ Note: VIF>5 indicates excessive collinearity
 | s5        | 1.46057 |
 ```
 
-Note that Example 2 using stepwise regression found a more parsimonious model with 5 features (compared with 7 features using Lasso regression), and similar skill compared with using Lasso regression for the same diabetes data set.
-
-Also note that the model_object and model_output returned by the stepwise function also provide the best-fitted statsmodels model object and a dictionary of many useful regression results and summary statistics as explained by running help(stepwise).
-
-## Example 3. Use Ridge regression to analyze diabetes data
+## Example 4. Use Ridge regression to analyze diabetes data
 
 In this example we will use Ridge regression to analyze the diabetes data available from sklearn. The ridge function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the ridge function uses the standardized X values to find each of the best fit models using RidgeCV, and Ridge using AIC, BIC, and VIF for optimization.
 
@@ -407,7 +430,7 @@ The VIF results using RidgeCV show substantially reduced multicollinearity (2 fe
 
 The RidgeVIF method is able to find a model where all features have acceptable VIF<5, with all VIF values as close as possible to the target VIF (default target VIF=1.0). The model skill for RidgeVIF is similar to the other methods.
 
-## Example 4. Use Elastic Net regression to analyze diabetes data
+## Example 5. Use Elastic Net regression to analyze diabetes data
 
 In this example we will use Elastic Net regression to analyze the diabetes data available from sklearn. The elastic function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the elastic function uses the standardized X values to find the best fit model using ElasticNetCV, and Ridge using MSE as the scoring criterion.
 
@@ -465,7 +488,7 @@ Coefficients of best models in model_outputs['popt']:
 
 Note that for the data in the example, the best fit model from ElasticNetCV was found using L1-ratio=1, which is equivalent to Lasso regression using LassoCV in the lasso function of MLRegression.
 
-## Example 5. Use Stacking regression to analyze diabetes data
+## Example 6. Use Stacking regression to analyze diabetes data
 
 In this example we will use Stacking regression to analyze the diabetes data available from sklearn. The **stacking** function uses the sklearn StackingRegressor with an ensemble of models. The **stacking** function standardizes the X values by default. 
 
@@ -524,6 +547,5 @@ Meta-model coefficients of base_regressors in model_outputs['meta_params']:
 | RandomForestRegressor     |           0.096149  |
 ```
 
-Note that the stacking regression was able to find a final model with greater skill than the methods used in Examples 1-4.
 
 
