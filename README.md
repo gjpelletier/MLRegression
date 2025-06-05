@@ -182,7 +182,7 @@ from MLRegression import xgb_auto
 model_objects, model_outputs = xgb_auto(X, y)
 ```
 
-Running the code above produces the following display of output tables with regression statistics:
+Running the code above produces the following display of regression statistics:
 ```
 | Statistic   |   XGBRegressor |
 |:------------|---------------:|
