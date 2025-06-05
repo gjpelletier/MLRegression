@@ -15,7 +15,7 @@ The MLRegression module includes the following main Python functions to facilita
  
 The functions in the MLRegression module fit multiple linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
 
-The functions in the MLRegression module allow the user to write one line of python code to display and save output of the following:
+The functions in the MLRegression module allow the user to write one line of python code to provide the following:
 
 - regression summary statistics of the best fit model (e.g. r-squared, adjusted r-squared, RMSE of residuals, p-value of the F-statistic, AIC, BIC, alpha, etc.)
 - best fit intercept and model coefficients (if applicable)
