@@ -7,7 +7,7 @@ The MLRegression module includes the following main Python functions to facilita
  - **elastic** - ElasticNetCV
  - **gbr** - GradientBoostingRegressor
  - **xgb** - XGBoostRegressor with user-specified hyper-parameters
- - **xgb_auto** - XGBoostRegressor with automatic calibration to find the best hyper-parameters with optuna
+ - **xgb_auto** - XGBoostRegressor with automatic calibration of the best hyper-parameters with optuna
  - **lgbm** - LGBMRegressor
  - **svr** - SVR - Epsilon-Support Vector Regression
  - **stacking** - StackingRegressor
