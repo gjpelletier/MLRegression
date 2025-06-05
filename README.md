@@ -162,7 +162,7 @@ if you are upgrading from a previous installation of MLRegression, enter the fol
 pip install git+https://github.com/gjpelletier/MLRegression.git --upgrade
 ```
 
-Next import the **stepwise**, **lasso**, **ridge**, and **elastic** functions from the MLRegression module as follows in your notebook or python code:<br>
+Next import the main functions from the MLRegression module as follows in your notebook or python code:<br>
 ```
 from MLRegression import stepwise, lasso, ridge, elastic, xgb, xgb_auto, gbr, lgbm, svr, stacking
 ```
