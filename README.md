@@ -25,7 +25,7 @@ The functions in the MLRegression module allow the user to write one line of pyt
 - final fitted model object
 - automatic calibration of hyper-parameters
 - scaler used to standardize X (if applicable)
-- automatic detection and use of GPU (XGBoost only)
+- automatic detection and use of GPU for 10x faster computations (XGBoost only)
 
 ### Lasso
 
