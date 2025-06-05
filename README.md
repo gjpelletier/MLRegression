@@ -6,8 +6,8 @@ The MLRegression module includes the following main Python functions to facilita
  - **ridge** - RidgeCV, Ridge using AIC/BIC, Ridge using VIF
  - **elastic** - ElasticNetCV
  - **gbr** - GradientBoostingRegressor
- - **xgb** - XGBoostRegressor with manual calibration of the hyper-parameters
- - **xgb_auto** - XGBoostRegressor with automatic calibration of the best parameters
+ - **xgb** - XGBoostRegressor with user-specified hyper-parameters
+ - **xgb_auto** - XGBoostRegressor with automatic calibration to find the best hyper-parameters with optuna
  - **lgbm** - LGBMRegressor
  - **svr** - SVR - Epsilon-Support Vector Regression
  - **stacking** - StackingRegressor
