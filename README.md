@@ -17,12 +17,12 @@ The functions in the MLRegression module fit multiple linear regression models u
 
 The functions in the MLRegression module allow the user to write one line of python code to provide the following:
 
+- final fitted model object
 - regression summary statistics of the best fit model (e.g. r-squared, adjusted r-squared, RMSE of residuals, p-value of the F-statistic, AIC, BIC, alpha, etc.)
 - best fit intercept and model coefficients (if applicable)
 - variance  inflation factors (if applicable)
 - plots of predicted vs actual and predicted vs residuals
 - figures showing other diagnostic descriptions of the analysis if applicable (e.g. coefficients vs alpha, MSE vs alpha, AIC and BIC vs alpha)
-- final fitted model object
 - automatic calibration of hyper-parameters
 - scaler used to standardize X (if applicable)
 - automatic detection and use of GPU for 10x faster computations (XGBoost only)
