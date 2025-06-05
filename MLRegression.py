@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.18"
+__version__ = "1.1.19"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4769,7 +4769,7 @@ def xgb_objective(trial, X, y, **kwargs):
 def xgb_auto(X, y, **kwargs):
 
     """
-    Autocalibration of XGBoost
+    Autocalibration of XGBoost XGBRegressor hyper-parameters
     Beta version
 
     by
@@ -4913,8 +4913,6 @@ def xgb_auto(X, y, **kwargs):
 
     # Suppress warnings
     warnings.filterwarnings('ignore')
-    if data['verbose'] == 'on':
-        print("\n")
 
     # Set start time for calculating run time
     start_time = time.time()
