@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.17"
+__version__ = "1.1.18"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -4438,6 +4438,7 @@ def xgb(X, y, **kwargs):
             'on': standardize X using sklearn.preprocessing StandardScaler
             'off': do not standardize X (only used if X is already standardized)
         gpu= True (default) or False to autodetect if the computer has a gpu and use it
+
         n_estimators= 100,          # Number of boosting rounds (trees).
         max_depth= 6,               # Maximum depth of a tree.
         learning_rate= 0.3,         # Step size shrinkage (also called eta).
@@ -4486,7 +4487,7 @@ def xgb(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, detect_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -4538,8 +4539,8 @@ def xgb(X, y, **kwargs):
     data = {**defaults, **kwargs}
 
     if data['gpu']:
-        has_gpu = check_gpu()
-        if has_gpu:
+        use_gpu = detect_gpu()
+        if use_gpu:
             data['device'] = 'gpu'
         else:
             data['device'] = 'cpu'
