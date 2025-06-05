@@ -1,12 +1,12 @@
 # Tools for Machine Learning Regression in Python
 
-The MLRegression module includes the following main Python functions to facilitate the use of sklearn, XGBoost, LightGBM,  and statsmodels solvers: 
+The MLRegression module includes the following main Python functions to facilitate the use of sklearn, XGBoost, LightGBM, statsmodels, and optuna solvers: 
  
  - **lasso** - LassoCV, LassoLarsCV, and LassoLarsIC using AIC/BIC
  - **ridge** - RidgeCV, Ridge using AIC/BIC, Ridge using VIF
  - **elastic** - ElasticNetCV
  - **gbr** - GradientBoostingRegressor
- - **xgb** - XGBoostRegressor
+ - **xgb** and **xgb_auto** - XGBoostRegressor with manual or automatic calibration of the hyper-parameters. Automatic calibration of the best parameters can be done using **xgb_auto**
  - **lgbm** - LGBMRegressor
  - **svr** - SVR - Epsilon-Support Vector Regression
  - **stacking** - StackingRegressor
