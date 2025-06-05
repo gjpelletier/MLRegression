@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.1.16"
+__version__ = "1.1.17"
 
 def plot_predictions_from_test(model, X, y, scaler='off'):
 
@@ -98,10 +98,10 @@ def detect_dummy_variables(df, sep=None):
 
     return False
 
-def check_gpu():
+def detect_gpu():
     '''
     Check if the computer as an nvidia gpu
-    returns boolean has_gpu= True or False to indicate if the computer has a gpu or not
+    returns boolean use_gpu= True or False to indicate if the computer has a gpu or not
     '''
     import subprocess
     try:
@@ -109,15 +109,15 @@ def check_gpu():
         if result.returncode == 0:
             # print("GPU detected: NVIDIA GPU is available.")
             # print(result.stdout)
-            has_gpu = True
+            use_gpu = True
         else:
             # print("No NVIDIA GPU detected or `nvidia-smi` not installed.")
-            has_gpu = False
+            use_gpu = False
     except FileNotFoundError:
         # print("`nvidia-smi` command not found. Ensure NVIDIA drivers are installed.")
-        has_gpu = False
+        use_gpu = False
         print("Auto-detect gpu failed, try using keyword argument gpu=False")
-    return has_gpu
+    return use_gpu
 
 def nnn(x):
 
@@ -3171,7 +3171,7 @@ def stacking(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, detect_gpu
     import time
     import pandas as pd
     import numpy as np
@@ -3547,7 +3547,7 @@ def svr(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -3832,7 +3832,7 @@ def sgd(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -4126,7 +4126,7 @@ def gbr(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -4631,48 +4631,7 @@ def xgb(X, y, **kwargs):
         predictor= data['predictor'],          
         enable_categorical= data['enable_categorical']  
         ).fit(X,y)
-    
-    '''
-    # Alternative fitting using cross_validated_model
-    # Initialize the GradientBoostingRegressor
-    model = GradientBoostingRegressor(random_state=data['random_state'])
-    
-    # Clone and fit the model to the entire dataset
-    fitted_model, mean_score = cross_validated_model(
-        model, X, y, cv=data['nfolds'], scoring=data['scoring'])
-    '''
-
-    '''
-    # Alternative fitting looping through random splits to pick best model
-    # fitted_model = GradientBoostingRegressor(random_state=data['random_state']).fit(X,y)
-    # Initialize variables to track the best model
-    best_model = None
-    best_rmse_diff = float('inf')
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42)        
-    # Iterate over the range of random seeds
-    # for n_estimators in n_estimators_range:
-    for seed in range(data['nfolds']):  # loop through random seeds for splitting
-        # random split of train and test subsets
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=seed)        
-        # Create and fit the model
-        model = GradientBoostingRegressor(
-            random_state=data['random_state'])
-        model.fit(X_train, y_train)
-        # Calculate RMSE for training and testing sets
-        train_rmse = np.sqrt(mean_squared_error(y_train, model.predict(X_train)))
-        test_rmse = np.sqrt(mean_squared_error(y_test, model.predict(X_test)))
-        # Calculate the absolute difference between train and test RMSE
-        rmse_diff = abs(train_rmse - test_rmse)
-        print(seed, rmse_diff, best_rmse_diff)
-        # Update the best model if the current one has a smaller RMSE difference
-        if rmse_diff < best_rmse_diff:
-            best_rmse_diff = rmse_diff
-            best_model = model
-    fitted_model = best_model
-    '''
-    
+        
     # check to see of the model has intercept and coefficients
     if (hasattr(fitted_model, 'intercept_') and hasattr(fitted_model, 'coef_') 
             and fitted_model.coef_.size==len(X.columns)):
@@ -4733,16 +4692,344 @@ def xgb(X, y, **kwargs):
         plt.savefig("XGBRegressor_predictions.png", dpi=300)
     
     # Make the model_outputs dataframes
+    list1_name = ['r-squared', 'RMSE', 'n_samples']        
+    list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
+    
+    stats = pd.DataFrame(
+        {
+            "Statistic": list1_name,
+            "XGBRegressor": list1_val
+        }
+        )
+    stats.set_index('Statistic',inplace=True)
+    model_outputs['stats'] = stats
+    print("XGBRegressor statistics of fitted model in model_outputs['stats']:")
+    print("\n")
+    print(model_outputs['stats'].to_markdown(index=True))
+    print("\n")
+    if hasattr(fitted_model, 'intercept_') and hasattr(fitted_model, 'coef_'):
+        print("Parameters of fitted model in model_outputs['popt']:")
+        print("\n")
+        print(model_outputs['popt_table'].to_markdown(index=True))
+        print("\n")
+
+    # Print the run time
+    fit_time = time.time() - start_time
+    print('Done')
+    print(f"Time elapsed: {fit_time:.2f} sec")
+
+    # Restore warnings to normal
+    warnings.filterwarnings("default")
+
+    return fitted_model, model_outputs
+
+def xgb_objective(trial, X, y, **kwargs):
     '''
-    list1_name = ['r-squared','adjusted r-squared',
-                        'n_samples','df residuals','df model',
-                        'F-statistic','Prob (F-statistic)','RMSE',
-                        'Log-Likelihood','AIC','BIC']    
-    list1_val = [stats["rsquared"], stats["adj_rsquared"],
-                       stats["n_samples"], stats["df"], stats["dfn"], 
-                       stats["Fstat"], stats["pvalue"], stats["RMSE"],  
-                       stats["log_likelihood"],stats["aic"],stats["bic"]]
+    Objective function used by optuna 
+    to find the optimum hyper-parameters for XGBoost
     '''
+    import numpy as np
+    import xgboost as xgb
+    from sklearn.model_selection import cross_val_score
+    from MLRegression import detect_gpu
+
+    # Detect if the computer has an nvidia gpu, and if so use the gpu
+    use_gpu = detect_gpu()
+    if use_gpu:
+        device = 'gpu'
+    else:
+        device = 'cpu'
+    
+    params = {
+        "learning_rate": trial.suggest_float("learning_rate",
+            kwargs['learning_rate'][0], kwargs['learning_rate'][1]),
+        "max_depth": trial.suggest_int("max_depth",
+            kwargs['max_depth'][0], kwargs['max_depth'][1]),
+        "min_child_weight": trial.suggest_int("min_child_weight",
+            kwargs['min_child_weight'][0], kwargs['min_child_weight'][1]),
+        "subsample": trial.suggest_float("subsample",
+            kwargs['subsample'][0], kwargs['subsample'][1]),
+        "colsample_bytree": trial.suggest_float("colsample_bytree",
+            kwargs['colsample_bytree'][0], kwargs['colsample_bytree'][1]),
+        "gamma": trial.suggest_float("gamma",
+            kwargs['gamma'][0], kwargs['gamma'][1]),
+        "reg_lambda": trial.suggest_float("reg_lambda",
+            kwargs['reg_lambda'][0], kwargs['reg_lambda'][1]),
+        "alpha": trial.suggest_float("alpha",
+            kwargs['alpha'][0], kwargs['alpha'][1]),
+        "n_estimators": trial.suggest_int("n_estimators",
+            kwargs['n_estimators'][0], kwargs['n_estimators'][1]),
+    }    
+    # Train model with CV
+    model = xgb.XGBRegressor(**params, random_state=42, device=device)
+    score = cross_val_score(model, X, y, cv=5, scoring="neg_root_mean_squared_error")    
+    return np.mean(score)
+
+def xgb_auto(X, y, **kwargs):
+
+    """
+    Autocalibration of XGBoost
+    Beta version
+
+    by
+    Greg Pelletier
+    gjpelletier@gmail.com
+    04-June-2025
+
+    REQUIRED INPUTS (X and y should have same number of rows and 
+    only contain real numbers)
+    X = dataframe of the candidate independent variables 
+        (as many columns of data as needed)
+    y = dataframe of the dependent variable (one column of data)
+
+    OPTIONAL KEYWORD ARGUMENTS
+    **kwargs (optional keyword arguments):
+        verbose= 'on' (default) or 'off'
+        standardize= 'on' (default) or 'off' where
+            'on': standardize X using sklearn.preprocessing StandardScaler
+            'off': do not standardize X (only used if X is already standardized)
+        gpu= True (default) or False to autodetect if the computer has a gpu and use it
+        'random_state': 42,                 # Random seed for reproducibility.
+        'verbosity': 1,                     # Verbosity of output 
+                                            # (0 = silent, 1 = warnings, 2 = info).
+        'objective': "reg:squarederror",    # Loss function for regression.
+        'booster': "gbtree",                # Type of booster ('gbtree', 'gblinear', or 'dart').
+        'learning_rate': [0.01, 0.3],       # Range of Step size shrinkage (also called eta).
+        'max_depth': [3, 10],               # Range of Maximum depth of a tree.
+        'min_child_weight': [1, 10],        # Range of Minimum sum of instance weight 
+                                            #(hessian) needed in a child.
+        'subsample': [0.5, 1],              # Fraction of samples used for training each tree.
+        'colsample_bytree': [0.5, 1],       # Fraction of features used for each tree.
+        'gamma': [0, 10],                   # Minimum loss reduction to make a split.
+        'reg_lambda': [0, 10],              # L2 regularization term on weights.
+        'alpha': [0, 10],                   # L1 regularization term on weights.
+        'n_estimators': [100, 1000]         # Number of boosting rounds (trees).
+
+    Standardization is generally recommended
+
+    RETURNS
+        fitted_model, model_outputs
+            model_objects is the fitted model object
+            model_outputs is a dictionary of the following outputs: 
+                - 'scaler': sklearn.preprocessing StandardScaler for X
+                - 'standardize': 'on' scaler was used for X, 'off' scaler not used
+                - 'best_params': best model hyper-parameters found by optuna
+                - 'y_pred': Predicted y values
+                - 'residuals': Residuals (y-y_pred) for each of the four methods
+                - 'stats': Regression statistics for each model
+
+    NOTE
+    Do any necessary/optional cleaning of the data before 
+    passing the data to this function. X and y should have the same number of rows
+    and contain only real numbers with no missing values. X can contain as many
+    columns as needed, but y should only be one column. X should have unique
+    column names for for each column
+
+    EXAMPLE 
+    model_objects, model_outputs = xgb(X, y)
+
+    """
+
+    from MLRegression import stats_given_y_pred, detect_dummy_variables, detect_gpu
+    import time
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import cross_val_score, train_test_split
+    from sklearn.metrics import mean_squared_error
+    from sklearn.base import clone
+    from sklearn.metrics import PredictionErrorDisplay
+    from sklearn.model_selection import train_test_split
+    import matplotlib.pyplot as plt
+    import warnings
+    import sys
+    import statsmodels.api as sm
+    import xgboost as xgb
+    from xgboost import XGBRegressor
+    import optuna
+
+    # Define default values of input data arguments
+    defaults = {
+        'n_trials': 50,                     # number of optuna trials
+        'standardize': 'on',
+        'verbose': 'on',
+        'gpu': True,                        # Autodetect to use gpu if present
+        'random_state': 42,                 # Random seed for reproducibility.
+        'verbosity': 1,                     # Verbosity of output (0 = silent, 1 = warnings, 2 = info).
+        'objective': "reg:squarederror",    # Loss function for regression.
+        'booster': "gbtree",                # Type of booster ('gbtree', 'gblinear', or 'dart').
+        'learning_rate': [0.01, 0.3],       # Step size shrinkage (also called eta).
+        'max_depth': [3, 10],               # Maximum depth of a tree.
+        'min_child_weight': [1, 10],        # Minimum sum of instance weight (hessian) needed in a child.
+        'subsample': [0.5, 1],              # Fraction of samples used for training each tree.
+        'colsample_bytree': [0.5, 1],       # Fraction of features used for each tree.
+        'gamma': [0, 10],                   # Minimum loss reduction to make a split.
+        'reg_lambda': [0, 10],              # L2 regularization term on weights.
+        'alpha': [0, 10],                   # L1 regularization term on weights.
+        'n_estimators': [100, 1000]         # Number of boosting rounds (trees).
+    }
+
+    # Update input data argumements with any provided keyword arguments in kwargs
+    data = {**defaults, **kwargs}
+
+    # Dictionary to pass to optuna
+
+    if data['gpu']:
+        use_gpu = detect_gpu()
+        if use_gpu:
+            data['device'] = 'gpu'
+        else:
+            data['device'] = 'cpu'
+    else:
+        data['device'] = 'cpu'
+
+    # check for input errors
+    ctrl = isinstance(X, pd.DataFrame)
+    if not ctrl:
+        print('Check X: it needs to be pandas dataframes!','\n')
+        sys.exit()
+    ctrl = (X.index == y.index).all()
+    if not ctrl:
+        print('Check X and y: they need to have the same index values!','\n')
+        sys.exit()
+    ctrl = np.isreal(X).all() and X.isna().sum().sum()==0 and X.ndim==2
+    if not ctrl:
+        print('Check X: it needs be a 2-D dataframe of real numbers with no nan values!','\n')
+        sys.exit()
+    ctrl = np.isreal(y).all() and y.isna().sum().sum()==0 and y.ndim==1
+    if not ctrl:
+        print('Check X: it needs be a 1-D dataframe of real numbers with no nan values!','\n')
+        sys.exit()
+    ctrl = X.shape[0] == y.shape[0]
+    if not ctrl:
+        print('Check X and y: X and y need to have the same number of rows!','\n')
+        sys.exit()
+    ctrl = X.columns.is_unique
+    if not ctrl:
+        print('Check X: X needs to have unique column names for every column!','\n')
+        sys.exit()
+
+    # Suppress warnings
+    warnings.filterwarnings('ignore')
+    if data['verbose'] == 'on':
+        print("\n")
+
+    # Set start time for calculating run time
+    start_time = time.time()
+
+    # check if X contains dummy variables
+    X_has_dummies = detect_dummy_variables(X)
+
+    # Initialize output dictionaries
+    model_objects = {}
+    model_outputs = {}
+
+    # Standardized X (X_scaled)
+    scaler = StandardScaler().fit(X)
+    X_scaled = scaler.transform(X)
+    # Convert scaled arrays into pandas dataframes with same column names as X
+    X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+    # Copy index from unscaled to scaled dataframes
+    X_scaled.index = X.index
+    # model_outputs['X_scaled'] = X_scaled                 # standardized X
+    model_outputs['scaler'] = scaler                     # scaler used to standardize X
+    model_outputs['standardize'] = data['standardize']   # 'on': X_scaled was used to fit, 'off': X was used
+
+    # Specify X to be used for fitting the models 
+    if data['standardize'] == 'on':
+        X = X_scaled.copy()
+    elif data['standardize'] == 'off':
+        X = X.copy()
+
+    obj_kwargs = {
+        'learning_rate': data['learning_rate'],
+        'max_depth': data['max_depth'],
+        'min_child_weight': data['min_child_weight'], 
+        'subsample': data['subsample'], 
+        'colsample_bytree': data['colsample_bytree'], 
+        'gamma': data['gamma'],
+        'reg_lambda': data['reg_lambda'], 
+        'alpha': data['alpha'], 
+        'n_estimators': data['n_estimators'] 
+    }
+
+    print('Running optuna to find best parameters, could take a few minutes, please wait...')
+    optuna.logging.set_verbosity(optuna.logging.ERROR)
+    study = optuna.create_study(direction="maximize")
+    study.optimize(lambda trial: xgb_objective(trial, X, y, **obj_kwargs), n_trials=data['n_trials'])
+    best_params = study.best_params
+    model_outputs['best_params'] = best_params
+
+    print('Fitting XGBRegressor model with best parameters, please wait ...')
+    fitted_model = XGBRegressor(**best_params,
+        device= data['device'],                 
+        random_state= data['random_state'],         
+        booster= data['booster'],          
+        objective= data['objective'], 
+        verbosity= data['verbosity']              
+        ).fit(X,y)
+       
+    # check to see of the model has intercept and coefficients
+    if (hasattr(fitted_model, 'intercept_') and hasattr(fitted_model, 'coef_') 
+            and fitted_model.coef_.size==len(X.columns)):
+        intercept = fitted_model.intercept_
+        coefficients = fitted_model.coef_
+        # dataframe of model parameters, intercept and coefficients, including zero coefs
+        n_param = 1 + fitted_model.coef_.size               # number of parameters including intercept
+        popt = [['' for i in range(n_param)], np.full(n_param,np.nan)]
+        for i in range(n_param):
+            if i == 0:
+                popt[0][i] = 'Intercept'
+                popt[1][i] = model.intercept_
+            else:
+                popt[0][i] = X.columns[i-1]
+                popt[1][i] = model.coef_[i-1]
+        popt = pd.DataFrame(popt).T
+        popt.columns = ['Feature', 'Parameter']
+        # Table of intercept and coef
+        popt_table = pd.DataFrame({
+                "Feature": popt['Feature'],
+                "Parameter": popt['Parameter']
+            })
+        popt_table.set_index('Feature',inplace=True)
+        model_outputs['popt_table'] = popt_table
+    
+    # Calculate regression statistics
+    y_pred = fitted_model.predict(X)
+    stats = stats_given_y_pred(X,y,y_pred)
+    
+    # model objects and outputs returned by stacking
+    model_outputs['scaler'] = scaler                     # scaler used to standardize X
+    model_outputs['standardize'] = data['standardize']   # 'on': X_scaled was used to fit, 'off': X was used
+    model_outputs['y_pred'] = stats['y_pred']
+    model_outputs['residuals'] = stats['residuals']
+    # model_objects = model
+    
+    # residual plot for training error
+    if data['verbose'] == 'on':
+        fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
+        PredictionErrorDisplay.from_predictions(
+            y,
+            y_pred=stats['y_pred'],
+            kind="actual_vs_predicted",
+            ax=axs[0]
+        )
+        axs[0].set_title("Actual vs. Predicted")
+        PredictionErrorDisplay.from_predictions(
+            y,
+            y_pred=stats['y_pred'],
+            kind="residual_vs_predicted",
+            ax=axs[1]
+        )
+        axs[1].set_title("Residuals vs. Predicted")
+        fig.suptitle(
+            f"Predictions compared with actual values and residuals (RMSE={stats['RMSE']:.3f})")
+        plt.tight_layout()
+        # plt.show()
+        plt.savefig("XGBRegressor_predictions.png", dpi=300)
+    
+    # Make the model_outputs dataframes
     list1_name = ['r-squared', 'RMSE', 'n_samples']        
     list1_val = [stats["rsquared"], stats["RMSE"], stats["n_samples"]]
     
@@ -4842,7 +5129,7 @@ def lgbm(X, y, **kwargs):
 
     """
 
-    from MLRegression import stats_given_y_pred, detect_dummy_variables, check_gpu
+    from MLRegression import stats_given_y_pred, detect_dummy_variables
     import time
     import pandas as pd
     import numpy as np
@@ -4888,17 +5175,6 @@ def lgbm(X, y, **kwargs):
 
     # Update input data argumements with any provided keyword arguments in kwargs
     data = {**defaults, **kwargs}
-
-    '''
-    if data['gpu']:
-        has_gpu = check_gpu()
-        if has_gpu:
-            data['device_type'] = 'gpu'
-        else:
-            data['device_type'] = 'cpu'
-    else:
-        data['device_type'] = 'cpu'
-    '''
 
     # check for input errors
     ctrl = isinstance(X, pd.DataFrame)
@@ -5124,7 +5400,6 @@ def lgbm(X, y, **kwargs):
     warnings.filterwarnings("default")
 
     return fitted_model, model_outputs
-
 
 
 
