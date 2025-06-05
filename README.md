@@ -164,10 +164,10 @@ pip install git+https://github.com/gjpelletier/MLRegression.git --upgrade
 
 Next import the **stepwise**, **lasso**, **ridge**, and **elastic** functions from the MLRegression module as follows in your notebook or python code:<br>
 ```
-from MLRegression import stepwise, lasso, ridge, elastic
+from MLRegression import stepwise, lasso, ridge, elastic, xgb, xgb_auto, gbr, lgbm, svr, stacking
 ```
 
-## Example 1. Automatic calibration of XGBoost to analyze diabetes data
+## Example 1. Automatic cross-validated calibration of XGBoost to analyze diabetes data
 
 In this example we will use **xgb_auto** to automatically calibrate the XGBoost parameters using cross-validation. The xgb_auto function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the xgb_auto function finds the best fitting cross-validated hyper-parameters for XGBoost.
 
