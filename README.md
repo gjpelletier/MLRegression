@@ -15,8 +15,6 @@ The MLRegression module includes the following main Python functions to facilita
  - **stacking** - StackingRegressor
  - **stepwise** - Stepwise multiple linear regression to minimize MSE, AIC, or BIC
  
-The functions in the MLRegression module fit multiple linear regression models using solvers from statsmodels and sklearn, and add functionality to make it easier to apply those methods. 
-
 The functions in the MLRegression module allow the user to write one line of python code to provide the following:
 
 - final fitted model object
@@ -179,7 +177,7 @@ Run the following code:
 from sklearn.datasets import load_diabetes
 X, y = load_diabetes(return_X_y=True, as_frame=True)
 
-# Use the lasso function in the MLRegression module
+# Use the xgb_auto function in the MLRegression module
 from MLRegression import xgb_auto
 model_objects, model_outputs = xgb_auto(X, y)
 ```
