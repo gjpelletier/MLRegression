@@ -169,7 +169,7 @@ from MLRegression import stepwise, lasso, ridge, elastic, xgb, xgb_auto, gbr, lg
 
 ## Example 1. Automatic cross-validated calibration of XGBoost to analyze diabetes data
 
-In this example we will use **xgb_auto** to automatically calibrate the XGBoost parameters using cross-validation. The xgb_auto function uses the sklearn.processing StandardScaler to standardize the X values by default. Then the xgb_auto function finds the best fitting cross-validated hyper-parameters for XGBoost.
+In this example we will use **xgb_auto** to automatically calibrate the XGBoost parameters using cross-validation. The xgb_auto function standardizes the X values by default. 
 
 Run the following code:
 ```
