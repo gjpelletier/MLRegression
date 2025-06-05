@@ -1,5 +1,7 @@
 # Tools for Machine Learning Regression in Python
 
+## Note: This MLRegression module has been replaced by the EasyMLR module that is available at this link: https://github.com/gjpelletier/EasyMLR
+
 The MLRegression module includes the following main Python functions to facilitate the use of sklearn, XGBoost, LightGBM, statsmodels, and optuna solvers: 
  
  - **lasso** - LassoCV, LassoLarsCV, and LassoLarsIC using AIC/BIC
